@@ -63,6 +63,10 @@ npm start
 
 Note that the project uses [TypeScript][].
 
+## License
+
+All code is licensed under CC0 (public domain).
+
 [Walden]: https://www.waldengame.com/
 [NodeJS]: https://nodejs.org/en/
 [TypeScript]: http://www.typescriptlang.org/

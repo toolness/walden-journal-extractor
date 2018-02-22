@@ -7,8 +7,8 @@
     "postinstall": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Atul Varma",
-  "license": "ISC",
+  "author": "Atul Varma <varmaa@gmail.com>",
+  "license": "CC0-1.0",
   "dependencies": {
     "@types/xml2js": "^0.4.2",
     "source-map-support": "^0.5.3",
