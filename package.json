@@ -4,6 +4,7 @@
   "description": "Journal extractor for waldengame.com",
   "scripts": {
     "start": "tsc --watch",
+    "postinstall": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Atul Varma",
