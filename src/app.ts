@@ -13,24 +13,30 @@ function ewriteln(msg: string) {
     process.stderr.write(`${msg}\n`);
 }
 
-function findSaveGameDir(): string {
+function findWaldenDir(): string | undefined {
     const userProfileDir = process.env['USERPROFILE'];
 
-    if (!userProfileDir) {
-        throw new Error('USERPROFILE environment variable not found!');
+    if (userProfileDir) {
+        const waldenDir = path.join(
+            userProfileDir, 'AppData', 'LocalLow', 'Game Innovation Lab',
+            'Walden, a game'
+        );
+
+        if (fs.existsSync(waldenDir)) {
+            return waldenDir;
+        }
     }
-    
-    const waldenDir = path.join(
-        userProfileDir, 'AppData', 'LocalLow', 'Game Innovation Lab',
-        'Walden, a game'
-    );
-    
+
+    return undefined;
+}
+
+function findSaveGameDir(waldenDir: string): string {
     const saveGameDir = path.join(waldenDir, 'Assets', 'SaveGames');
-    
+
     if (!fs.existsSync(saveGameDir)) {
         throw new Error('Walden save game directory not found!');
     }
-    
+
     return saveGameDir;
 }
 
@@ -46,7 +52,17 @@ async function getSlots(saveGameDir: string,
 }
 
 async function main(argv: string[]) {
-    const saveGameDir = findSaveGameDir();
+    const waldenDir = process.env['WALDEN_DIR'] || findWaldenDir();
+
+    if (!waldenDir) {
+        ewriteln(
+            'Walden directory not found. Please define the WALDEN_DIR ' +
+            'environment variable to point at it.'
+        );
+        return process.exit(1);
+    }
+
+    const saveGameDir = findSaveGameDir(waldenDir);
     let [cmd, slot] = argv;
 
     cmd = path.basename(cmd);
@@ -55,7 +71,7 @@ async function main(argv: string[]) {
         ewriteln(`Usage: ${cmd} <save-slot>\n`);
         ewriteln(`save-slot can be one of:\n`);
         ewriteln(await getSlots(saveGameDir));
-        process.exit(1);
+        return process.exit(1);
     } else {
         const game = (await SaveGame.retrieveAll(saveGameDir))
           .filter(g => g.slot === parseInt(slot))[0];
@@ -63,7 +79,7 @@ async function main(argv: string[]) {
             ewriteln(`Save slot '${slot}' does not exist.\n`);
             ewriteln(`Please choose from one of the following:\n`);
             ewriteln(await getSlots(saveGameDir));
-            process.exit(1);
+            return process.exit(1);
         } else {
             writeln(journalTextToMarkdown(await game.getJournal()));
         }
