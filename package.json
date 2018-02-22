@@ -1,0 +1,17 @@
+{
+  "name": "walden-extractor",
+  "version": "1.0.0",
+  "description": "Journal extractor for waldengame.com",
+  "scripts": {
+    "start": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Atul Varma",
+  "license": "ISC",
+  "dependencies": {
+    "@types/xml2js": "^0.4.2",
+    "source-map-support": "^0.5.3",
+    "typescript": "^2.7.2",
+    "xml2js": "^0.4.19"
+  }
+}
