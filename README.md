@@ -13,7 +13,7 @@ npm install
 Then run:
 
 ```
-node dist/app.js
+node dist/cli.js
 ```
 
 ## Example usage
