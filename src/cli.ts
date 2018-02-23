@@ -1,8 +1,8 @@
-import * as fs from 'fs';
 import * as path from 'path';
 import 'source-map-support/register'
 
 import SaveGame from './savegame';
+import { findWaldenDir, findSaveGameDir } from './dirs';
 import { journalTextToMarkdown } from './util';
 
 function writeln(msg: string) {
@@ -13,32 +13,6 @@ function ewriteln(msg: string) {
     process.stderr.write(`${msg}\n`);
 }
 
-function findWaldenDir(): string | undefined {
-    const userProfileDir = process.env['USERPROFILE'];
-
-    if (userProfileDir) {
-        const waldenDir = path.join(
-            userProfileDir, 'AppData', 'LocalLow', 'Game Innovation Lab',
-            'Walden, a game'
-        );
-
-        if (fs.existsSync(waldenDir)) {
-            return waldenDir;
-        }
-    }
-
-    return undefined;
-}
-
-function findSaveGameDir(waldenDir: string): string {
-    const saveGameDir = path.join(waldenDir, 'Assets', 'SaveGames');
-
-    if (!fs.existsSync(saveGameDir)) {
-        throw new Error('Walden save game directory not found!');
-    }
-
-    return saveGameDir;
-}
 
 async function getSlots(saveGameDir: string,
                         indent: string = '  '): Promise<string> {
@@ -52,7 +26,7 @@ async function getSlots(saveGameDir: string,
 }
 
 async function main(argv: string[]) {
-    const waldenDir = process.env['WALDEN_DIR'] || findWaldenDir();
+    const waldenDir = process.env['WALDEN_DIR'] || await findWaldenDir();
 
     if (!waldenDir) {
         ewriteln(
@@ -62,7 +36,16 @@ async function main(argv: string[]) {
         return process.exit(1);
     }
 
-    const saveGameDir = findSaveGameDir(waldenDir);
+    const saveGameDir = await findSaveGameDir(waldenDir);
+
+    if (!saveGameDir) {
+        ewriteln(
+            'Walden directory found, but the save game directory' +
+            'was not!'
+        );
+        return process.exit(1);
+    }
+
     let [cmd, slot] = argv;
 
     cmd = path.basename(cmd);
