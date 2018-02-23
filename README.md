@@ -22,8 +22,8 @@ Running the app without any arguments will show you a list of saved game
 slots:
 
 ```bash
-$ node dist/app.js
-Usage: app.js <save-slot>
+$ node dist/cli.js
+Usage: cli.js <save-slot>
 
 save-slot can be one of:
 
@@ -42,7 +42,7 @@ Once you've decided on a slot, you can re-run the app with the slot
 number to display its journal:
 
 ```bash
-$ node dist/app.js 3
+$ node dist/cli.js 3
 # Journal, 1845
 
 ## Early Summer
