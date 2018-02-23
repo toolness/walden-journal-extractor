@@ -1,4 +1,6 @@
 import { h, Component, render } from 'preact';
+import { remote } from 'electron';
+import { default as SaveGameType } from '../savegame';
 
 export interface AppProps {
     msg: string;
@@ -14,3 +16,9 @@ export class App extends Component<AppProps, AppState> {
 }
 
 render(<App msg="Hello."></App>, document.getElementById('app'));
+
+const SaveGame = remote.require('./dist/savegame').default as typeof SaveGameType;
+
+SaveGame.retrieveAll('bop').catch((e) => {
+    console.log('error', e);
+});
