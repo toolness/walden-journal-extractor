@@ -1,6 +1,6 @@
 export interface GuiRequest {
     id: number;
-    method: string;
+    method: keyof RpcMethods;
     args: any[];
 }
 

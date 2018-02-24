@@ -18,7 +18,7 @@ const serverMethods: rpc.RpcMethods = {
 };
 
 ipcMain.on('gui-request', (event: IpcMessageEvent, request: rpc.GuiRequest) => {
-    const method = (serverMethods as any)[request.method];
+    const method = serverMethods[request.method];
 
     let promise: Promise<any>;
 
