@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { parseXML, friendlyGet } from './util';
+import Journal from './journal';
 
 export default class SaveGame {
     slot: number;
@@ -14,10 +15,12 @@ export default class SaveGame {
         this.path = path.join(rootDir, `SaveGame_${slot}.xml`);
     }
 
-    async getJournal(): Promise<string> {
+    async getJournal(): Promise<Journal> {
         const xml = fs.readFileSync(this.path, 'utf-8');
 
-        return friendlyGet(await parseXML(xml), 'SaveGame.writtenJournal.0');
+        const text: string = friendlyGet(await parseXML(xml), 'SaveGame.writtenJournal.0');
+
+        return Journal.fromText(text);
     }
 
     static async retrieveAll(rootDir: string): Promise<SaveGame[]> {

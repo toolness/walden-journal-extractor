@@ -38,27 +38,3 @@ export function friendlyGet(obj: any, path: string): any {
 
     return curr;
 }
-
-// This converts the journal text of a Walden save game into Markdown.
-export function journalTextToMarkdown(text: string): string {
-    const ALL_UNDERSCORES = /^_+$/;
-    const inputLines = text.split('\n');
-    const lines: string[] = [];
-    let lastLine: string | null = null;
-
-    inputLines.forEach((line, i) => {
-        if (i === 0) {
-            // Make the very first line a H1.
-            line = `# ${line}`;
-        }
-        if (ALL_UNDERSCORES.test(line) && lastLine) {
-            // Convert anything with a '_____' under it into a H2.
-            lines[lines.length - 1] = `## ${lines[lines.length - 1]}`;
-            line = '';
-        }
-        lines.push(line);
-        lastLine = line;
-    });
-
-    return lines.join('\n');
-}

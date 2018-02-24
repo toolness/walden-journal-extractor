@@ -3,7 +3,6 @@ import 'source-map-support/register'
 
 import SaveGame from './savegame';
 import { findWaldenDir, findSaveGameDir } from './dirs';
-import { journalTextToMarkdown } from './util';
 
 function writeln(msg: string) {
     process.stdout.write(`${msg}\n`);
@@ -64,7 +63,8 @@ async function main(argv: string[]) {
             ewriteln(await getSlots(saveGameDir));
             return process.exit(1);
         } else {
-            writeln(journalTextToMarkdown(await game.getJournal()));
+            const journal = await game.getJournal();
+            writeln(journal.asMarkdown());
         }
     }
 }
