@@ -18,7 +18,6 @@ export class App extends Component<AppProps, AppState> {
 render(<App msg="Hello."></App>, document.getElementById('app'));
 
 sendRequest({
-    id: Math.random(),
     ms: 1000,
 }).then((response) => {
     console.log('callback promise returned!', response);

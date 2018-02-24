@@ -1,9 +1,25 @@
 export interface GuiRequest {
     ms: number;
-    id: number;
 }
 
 export interface GuiResponse {
-    id: number;
-    error: string | null;
 }
+
+export interface GuiRequestWrapper {
+    id: number;
+    payload: GuiRequest;
+}
+
+export interface GuiResponseSuccess {
+    kind: 'success';
+    id: number;
+    payload: GuiResponse;
+}
+
+export interface GuiResponseError {
+    kind: 'error';
+    id: number;
+    message: string;
+}
+
+export type GuiResponseWrapper = GuiResponseSuccess | GuiResponseError;
