@@ -1,1 +1,1 @@
-require('./dist/gui');
+require('./dist/gui/main');
