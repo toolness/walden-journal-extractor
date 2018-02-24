@@ -4,11 +4,11 @@ import * as rpc from '../rpc';
 
 const clientMethods: rpc.RpcMethods = {
     sleep(timeout: number): Promise<void> {
-        return sendRequest('sleep', [timeout]);
+        return sendRequest('sleep', Array.from(arguments));
     },
 
     async add(a: number, b: number): Promise<number> {
-        return sendRequest('add', [a, b]);
+        return sendRequest('add', Array.from(arguments));
     }
 };
 
