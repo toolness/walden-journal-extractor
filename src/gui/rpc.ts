@@ -1,36 +1,13 @@
-export interface GuiSleepRequest {
-    kind: 'sleep';
-    ms: number;
-}
-
-export interface GuiAddRequest {
-    kind: 'add';
-    a: number;
-    b: number;
-}
-
-export type GuiRequest = GuiSleepRequest | GuiAddRequest;
-
-export interface GuiNullResponse {
-    kind: 'null';
-}
-
-export interface GuiNumberResponse {
-    kind: 'number';
-    value: number;
-}
-
-export type GuiResponse = GuiNullResponse | GuiNumberResponse;
-
-export interface GuiRequestWrapper {
+export interface GuiRequest {
     id: number;
-    payload: GuiRequest;
+    method: string;
+    args: any[];
 }
 
 export interface GuiResponseSuccess {
     kind: 'success';
     id: number;
-    payload: GuiResponse;
+    returnValue: any;
 }
 
 export interface GuiResponseError {
@@ -39,4 +16,10 @@ export interface GuiResponseError {
     message: string;
 }
 
-export type GuiResponseWrapper = GuiResponseSuccess | GuiResponseError;
+export type GuiResponse = GuiResponseSuccess | GuiResponseError;
+
+export interface RpcMethods {
+    sleep(timeout: number): Promise<void>;
+    add(a: number, b: number): Promise<number>;
+    [key: string]: (...args: any[]) => Promise<any>;
+}

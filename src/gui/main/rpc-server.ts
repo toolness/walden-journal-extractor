@@ -2,34 +2,34 @@ import { ipcMain, IpcMessageEvent } from 'electron';
 
 import * as rpc from '../rpc';
 
-function sleep(timeout: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-        if (timeout <= 0) {
-            return reject(new Error('timeout must be a positive number'));
-        }
-        setTimeout(resolve, timeout);
-    });
-}
+const serverMethods: rpc.RpcMethods = {
+    sleep(timeout: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (timeout <= 0) {
+                return reject(new Error('timeout must be a positive number'));
+            }
+            setTimeout(resolve, timeout);
+        });
+    },
 
-async function processRequest(request: rpc.GuiRequest): Promise<rpc.GuiResponse> {
-    switch (request.kind) {
-        case 'sleep':
-            await sleep(request.ms);
-            return { kind: 'null' };
-        case 'add':
-            return { kind: 'number', value: request.a + request.b };
+    async add(a: number, b: number): Promise<number> {
+        return a + b;
     }
-}
+};
 
-ipcMain.on('gui-request', (event: IpcMessageEvent, request: rpc.GuiRequestWrapper) => {
-    processRequest(request.payload).then((response) => {
-        const wrapper: rpc.GuiResponseWrapper = {
+ipcMain.on('gui-request', (event: IpcMessageEvent, request: rpc.GuiRequest) => {
+    const method = serverMethods[request.method];
+
+    const promise = method.apply(null, request.args);
+
+    promise.then((returnValue: any) => {
+        const response: rpc.GuiResponse = {
             kind: 'success',
             id: request.id,
-            payload: response,
+            returnValue
         };
-        event.sender.send('gui-response', wrapper);
-    }).catch(e => {
+        event.sender.send('gui-response', response);
+    }).catch((e: any) => {
         let message = 'Unknown error';
 
         if (e && typeof(e.message) === 'string') {
@@ -39,7 +39,7 @@ ipcMain.on('gui-request', (event: IpcMessageEvent, request: rpc.GuiRequestWrappe
         console.error(`Error occurred in gui-request ${request.id}.`);
         console.error(e);
 
-        const response: rpc.GuiResponseWrapper = {
+        const response: rpc.GuiResponse = {
             kind: 'error',
             id: request.id,
             message,
