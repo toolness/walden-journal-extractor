@@ -11,14 +11,24 @@ function sleep(timeout: number): Promise<void> {
     });
 }
 
+async function processRequest(request: rpc.GuiRequest): Promise<rpc.GuiResponse> {
+    switch (request.kind) {
+        case 'sleep':
+            await sleep(request.ms);
+            return { kind: 'null' };
+        case 'add':
+            return { kind: 'number', value: request.a + request.b };
+    }
+}
+
 ipcMain.on('gui-request', (event: IpcMessageEvent, request: rpc.GuiRequestWrapper) => {
-    sleep(request.payload.ms).then(() => {
-        const response: rpc.GuiResponseWrapper = {
+    processRequest(request.payload).then((response) => {
+        const wrapper: rpc.GuiResponseWrapper = {
             kind: 'success',
             id: request.id,
-            payload: {},
+            payload: response,
         };
-        event.sender.send('gui-response', response);
+        event.sender.send('gui-response', wrapper);
     }).catch(e => {
         let message = 'Unknown error';
 

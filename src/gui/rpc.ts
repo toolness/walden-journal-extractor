@@ -1,9 +1,26 @@
-export interface GuiRequest {
+export interface GuiSleepRequest {
+    kind: 'sleep';
     ms: number;
 }
 
-export interface GuiResponse {
+export interface GuiAddRequest {
+    kind: 'add';
+    a: number;
+    b: number;
 }
+
+export type GuiRequest = GuiSleepRequest | GuiAddRequest;
+
+export interface GuiNullResponse {
+    kind: 'null';
+}
+
+export interface GuiNumberResponse {
+    kind: 'number';
+    value: number;
+}
+
+export type GuiResponse = GuiNullResponse | GuiNumberResponse;
 
 export interface GuiRequestWrapper {
     id: number;

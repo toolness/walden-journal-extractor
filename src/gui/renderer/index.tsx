@@ -17,10 +17,9 @@ export class App extends Component<AppProps, AppState> {
 
 render(<App msg="Hello."></App>, document.getElementById('app'));
 
-sendRequest({
-    ms: 1000,
-}).then((response) => {
-    console.log('callback promise returned!', response);
-}).catch(e => {
-    console.log('an error occurred', e.message);
-});
+async function doStuff() {
+    console.log(await sendRequest({ kind: 'sleep', ms: 1000 }));
+    console.log(await sendRequest({ kind: 'add', a: 5, b: 3 }));
+}
+
+doStuff();
