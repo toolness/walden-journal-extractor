@@ -39,6 +39,8 @@ ipcRenderer.on('gui-response', (event: IpcMessageEvent, response: rpc.GuiRespons
         return;
     }
 
+    requestMap.delete(response.id);
+
     switch (response.kind) {
         case 'success': return callbacks.resolve(response.returnValue);
         case 'error': return callbacks.reject(new Error(response.message));
