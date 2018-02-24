@@ -23,7 +23,7 @@ const requestMap: Map<number, RequestPromiseCallbacks> = new Map();
 
 let nextId = Date.now();
 
-function sendRequest(method: string, args: any[]): Promise<any> {
+function sendRequest(method: keyof rpc.RpcMethods, args: any[]): Promise<any> {
     const id = nextId++;
     const request: rpc.GuiRequest = { id, method, args };
     ipcRenderer.send('gui-request', request);

@@ -21,5 +21,4 @@ export type GuiResponse = GuiResponseSuccess | GuiResponseError;
 export interface RpcMethods {
     sleep(timeout: number): Promise<void>;
     add(a: number, b: number): Promise<number>;
-    [key: string]: (...args: any[]) => Promise<any>;
 }

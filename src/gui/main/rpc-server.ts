@@ -18,9 +18,15 @@ const serverMethods: rpc.RpcMethods = {
 };
 
 ipcMain.on('gui-request', (event: IpcMessageEvent, request: rpc.GuiRequest) => {
-    const method = serverMethods[request.method];
+    const method = (serverMethods as any)[request.method];
 
-    const promise = method.apply(null, request.args);
+    let promise: Promise<any>;
+
+    if (typeof(method) === 'function') {
+        promise = method.apply(null, request.args);
+    } else {
+        promise = Promise.reject(new Error(`RPC method ${request.method} does not exist!`));
+    }
 
     promise.then((returnValue: any) => {
         const response: rpc.GuiResponse = {
