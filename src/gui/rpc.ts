@@ -1,3 +1,8 @@
+export interface SaveGameInfo {
+    slot: number;
+    name: string;
+}
+
 export interface GuiRequest {
     id: number;
     method: keyof RpcMethods;
@@ -19,6 +24,5 @@ export interface GuiResponseError {
 export type GuiResponse = GuiResponseSuccess | GuiResponseError;
 
 export interface RpcMethods {
-    sleep(timeout: number): Promise<void>;
-    add(a: number, b: number): Promise<number>;
+    getSaveGameInfos(): Promise<SaveGameInfo[]>;
 }

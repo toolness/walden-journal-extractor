@@ -1,19 +1,29 @@
 import { ipcMain, IpcMessageEvent } from 'electron';
 
+import SaveGame from '../../savegame';
+import * as dirs from '../../dirs';
 import * as rpc from '../rpc';
 
 const serverMethods: rpc.RpcMethods = {
-    sleep(timeout: number): Promise<void> {
-        return new Promise((resolve, reject) => {
-            if (timeout <= 0) {
-                return reject(new Error('timeout must be a positive number'));
-            }
-            setTimeout(resolve, timeout);
-        });
-    },
+    async getSaveGameInfos(): Promise<rpc.SaveGameInfo[]> {
+        const waldenDir = await dirs.findWaldenDir();
 
-    async add(a: number, b: number): Promise<number> {
-        return a + b;
+        if (!waldenDir) {
+            throw new Error('Unable to find Walden game directory!');
+        }
+
+        const saveGameDir = await dirs.findSaveGameDir(waldenDir);
+
+        if (!saveGameDir) {
+            throw new Error('Unable to find Walden save game directory!');
+        }
+
+        const games = await SaveGame.retrieveAll(saveGameDir);
+
+        return games.map((game): rpc.SaveGameInfo => ({
+            name: game.name,
+            slot: game.slot
+        }));
     }
 };
 

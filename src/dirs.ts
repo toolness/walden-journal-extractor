@@ -1,8 +1,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { promisify } from 'util';
 
-const exists = promisify(fs.exists);
+// Urg, we can't use util.promisify() because older versions of
+// Node don't support it properly.
+function exists(path: string): Promise<boolean> {
+    return new Promise(resolve => { fs.exists(path, resolve); });
+}
 
 export async function findWaldenDir(): Promise<string | undefined> {
     const userProfileDir = process.env['USERPROFILE'];
