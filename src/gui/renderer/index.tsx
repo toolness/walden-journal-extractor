@@ -1,8 +1,7 @@
 import { h, Component, render } from 'preact';
 
-import { SaveGameInfo } from '../rpc';
-
-import rpcMethods from './rpc-client';
+import SaveGame from '../../savegame';
+import * as remote from './remote';
 
 interface AppProps {
 }
@@ -18,7 +17,7 @@ interface ErrorState {
 
 interface LoadedState {
     type: 'loaded';
-    saveGames: SaveGameInfo[],
+    saveGames: SaveGame[];
 }
 
 type AppState = LoadingState | ErrorState | LoadedState;
@@ -29,20 +28,34 @@ export class App extends Component<AppProps, AppState> {
         this.state = { type: 'loading' };
     }
 
-    componentDidMount() {
-        rpcMethods.getSaveGameInfos().then(saveGames => {
+    async componentDidMount() {
+        try {
+            const waldenDir = await remote.findWaldenDir();
+
+            if (!waldenDir) {
+                throw new Error('Unable to find Walden game dir!');
+            }
+
+            const saveGameDir = await remote.findSaveGameDir(waldenDir);
+
+            if (!saveGameDir) {
+                throw new Error('Unable to find Walden save game dir!');
+            }
+
+            const saveGames = await remote.SaveGame.retrieveAll(saveGameDir);
+
             const newState: AppState = {
                 type: 'loaded',
                 saveGames,
             };
             this.setState(newState);
-        }).catch(e => {
+        } catch (e) {
             const newState: AppState = {
                 type: 'error',
                 message: e.message || 'Unknown error'
             };
             this.setState(newState);
-        });
+        }
     }
 
     render(props: AppProps, state: AppState) {
