@@ -1,6 +1,6 @@
+import * as dirs from '../../dirs';
 import SaveGame from '../../savegame';
 import Journal from '../../journal';
-import * as remote from './remote';
 
 export interface LoadingState {
     readonly type: 'loading';
@@ -47,7 +47,7 @@ export type Dispatcher = (action: AppAction|Promise<AppAction>) => void;
 export type Renderer = (state: AppState, dispatch: Dispatcher) => void;
 
 async function startLoading(): Promise<AppAction> {
-    const waldenDir = await remote.findWaldenDir();
+    const waldenDir = await dirs.findWaldenDir();
 
     if (!waldenDir) {
         return {
@@ -56,7 +56,7 @@ async function startLoading(): Promise<AppAction> {
         };
     }
 
-    const saveGameDir = await remote.findSaveGameDir(waldenDir);
+    const saveGameDir = await dirs.findSaveGameDir(waldenDir);
     const noSavedGamesErr: AppAction = {
         type: 'friendlyError',
         message: ('Alas, I found the Walden game directory, but I was ' +
@@ -67,7 +67,7 @@ async function startLoading(): Promise<AppAction> {
         return noSavedGamesErr;
     }
     
-    const saveGames = await remote.SaveGame.retrieveAll(saveGameDir);
+    const saveGames = await SaveGame.retrieveAll(saveGameDir);
 
     if (saveGames.length === 0) {
         return noSavedGamesErr;
