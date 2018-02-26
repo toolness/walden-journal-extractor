@@ -1,8 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { promisify } from 'util';
 
 import { parseXML, friendlyGet } from './util';
 import Journal from './journal';
+
+const readFile = promisify(fs.readFile);
 
 export default class SaveGame {
     readonly slot: number;
@@ -16,7 +19,7 @@ export default class SaveGame {
     }
 
     async getJournal(): Promise<Journal> {
-        const xml = fs.readFileSync(this.path, 'utf-8');
+        const xml = await readFile(this.path, 'utf-8');
 
         const text: string = friendlyGet(await parseXML(xml), 'SaveGame.writtenJournal.0');
 
@@ -25,7 +28,7 @@ export default class SaveGame {
 
     static async retrieveAll(rootDir: string): Promise<SaveGame[]> {
         const listFile = path.join(rootDir, 'SaveGameList.xml');
-        const xml = fs.readFileSync(listFile, 'utf-8');
+        const xml = await readFile(listFile, 'utf-8');
         const content = await parseXML(xml);
 
         return friendlyGet(content, 'SaveSlotList.SaveSlotList.0.SaveSlot')
