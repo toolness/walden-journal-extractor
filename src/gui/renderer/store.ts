@@ -6,7 +6,7 @@ interface LoadingState {
 }
 
 interface ErrorState {
-    type: 'error';
+    type: 'error'|'friendlyError';
     message: string;
 }
 
@@ -27,40 +27,47 @@ export type Dispatcher = (action: AppAction) => void;
 
 export type Renderer = (state: AppState, dispatch: Dispatcher) => void;
 
-async function startLoading(dispatch: Dispatcher) {
-    try {
-        const waldenDir = await remote.findWaldenDir();
+async function startLoading(): Promise<AppAction> {
+    const waldenDir = await remote.findWaldenDir();
 
-        if (!waldenDir) {
-            throw new Error('Unable to find Walden game dir!');
-        }
+    if (!waldenDir) {
+        return {
+            type: 'friendlyError',
+            message: 'Alas, I was unable to find the Walden game directory.'
+        };
+    }
 
-        const saveGameDir = await remote.findSaveGameDir(waldenDir);
+    const saveGameDir = await remote.findSaveGameDir(waldenDir);
 
-        if (!saveGameDir) {
-            throw new Error('Unable to find Walden save game dir!');
-        }
+    if (!saveGameDir) {
+        return {
+            type: 'friendlyError',
+            message: ('Alas, I found the Walden game directory, but I was ' +
+                      'unable to find any saved games.')
+        };
+    }
+    
+    const saveGames = await remote.SaveGame.retrieveAll(saveGameDir);
 
-        const saveGames = await remote.SaveGame.retrieveAll(saveGameDir);
+    return { type: 'loaded', saveGames };
+}
 
-        dispatch({
-            type: 'loaded',
-            saveGames,
-        });
-    } catch (e) {
+function dispatchAsync(promise: Promise<AppAction>, dispatch: Dispatcher) {
+    promise.then(dispatch).catch(e => {
         dispatch({
             type: 'error',
             message: e.message || 'Unknown error'
         });
-    }
+    });
 }
 
 function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): AppState {
     switch (action.type) {
         case 'init':
-        startLoading(dispatch);
+        dispatchAsync(startLoading(), dispatch);
         return { type: 'loading' };
 
+        case 'friendlyError':
         case 'error':
         case 'loaded':
         return action;

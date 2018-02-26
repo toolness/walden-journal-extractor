@@ -11,6 +11,7 @@ interface AppProps {
 function App(props: AppProps): JSX.Element {
     switch (props.state.type) {
         case 'loading': return <p>Please wait...</p>;
+        case 'friendlyError': return <p>{props.state.message}</p>;
         case 'error': return <p>Alas, an error occurred: {props.state.message}</p>;
         case 'loaded': return (
             <ul>
