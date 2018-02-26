@@ -24,7 +24,7 @@ async function getSlots(saveGameDir: string,
     }
 }
 
-async function main(argv: string[]) {
+async function main(argv: string[]): Promise<void> {
     const waldenDir = process.env['WALDEN_DIR'] || await findWaldenDir();
 
     if (!waldenDir) {
@@ -70,5 +70,8 @@ async function main(argv: string[]) {
 }
 
 if (module.parent === null) {
-    main(process.argv.slice(1));
+    main(process.argv.slice(1)).catch(e => {
+        console.error(e);
+        process.exit(1);
+    });
 }
