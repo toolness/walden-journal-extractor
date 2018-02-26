@@ -3,12 +3,10 @@ import { h, Component, render } from 'preact';
 
 import { AppStore, AppState, ErrorState, LoadedState, Dispatcher } from './store';
 
-interface BaseAppProps<T> {
+interface AppProps<T> {
     state: T;
     dispatch: Dispatcher;
 }
-
-type AppProps = BaseAppProps<AppState>;
 
 function Loading(): JSX.Element {
     return (
@@ -16,7 +14,7 @@ function Loading(): JSX.Element {
     );
 }
 
-function ErrorView({ state, dispatch }: BaseAppProps<ErrorState>): JSX.Element {
+function ErrorView({ state, dispatch }: AppProps<ErrorState>): JSX.Element {
     let errInfo: JSX.Element;
 
     if (state.type == 'friendlyError') {
@@ -35,7 +33,7 @@ function ErrorView({ state, dispatch }: BaseAppProps<ErrorState>): JSX.Element {
     );
 }
 
-function Loaded({ state, dispatch }: BaseAppProps<LoadedState>): JSX.Element {
+function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
     return (
         <ul>
           {state.saveGames.map(saveGame => (
@@ -49,7 +47,7 @@ function Loaded({ state, dispatch }: BaseAppProps<LoadedState>): JSX.Element {
     );
 }
 
-function App({ state, dispatch }: AppProps): JSX.Element {
+function App({ state, dispatch }: AppProps<AppState>): JSX.Element {
     switch (state.type) {
         case 'loading': return <Loading/>;
 
@@ -61,7 +59,7 @@ function App({ state, dispatch }: AppProps): JSX.Element {
     }
 }
 
-type AppWrapperState = AppProps;
+type AppWrapperState = AppProps<AppState>;
 
 export class AppWrapper extends Component<{}, AppWrapperState> {
     store: AppStore;
