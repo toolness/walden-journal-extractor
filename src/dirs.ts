@@ -1,11 +1,6 @@
 import * as path from 'path';
-import * as fs from 'fs';
 
-// Urg, we can't use util.promisify() because older versions of
-// Node don't support it properly.
-function exists(path: string): Promise<boolean> {
-    return new Promise(resolve => { fs.exists(path, resolve); });
-}
+import { fileExists } from './util';
 
 export async function findWaldenDir(): Promise<string | undefined> {
     const userProfileDir = process.env['USERPROFILE'];
@@ -16,7 +11,7 @@ export async function findWaldenDir(): Promise<string | undefined> {
             'Walden, a game'
         );
 
-        if (await exists(waldenDir)) {
+        if (await fileExists(waldenDir)) {
             return waldenDir;
         }
     }
@@ -27,7 +22,7 @@ export async function findWaldenDir(): Promise<string | undefined> {
 export async function findSaveGameDir(waldenDir: string): Promise<string | undefined> {
     const saveGameDir = path.join(waldenDir, 'Assets', 'SaveGames');
 
-    if (await exists(saveGameDir)) {
+    if (await fileExists(saveGameDir)) {
         return saveGameDir;
     }
 

@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import * as xml2js from 'xml2js';
 
 // This is just a promise-ified wrapper for xml2js.parseString().
@@ -37,4 +39,12 @@ export function friendlyGet(obj: any, path: string): any {
     });
 
     return curr;
+}
+
+// This is just a promisified version of fs.exists().
+//
+// We can't just use util.promisify() because older versions of
+// Node don't support it properly.
+export function fileExists(path: string): Promise<boolean> {
+    return new Promise(resolve => { fs.exists(path, resolve); });
 }
