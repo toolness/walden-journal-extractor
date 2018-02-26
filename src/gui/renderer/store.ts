@@ -1,23 +1,23 @@
 import SaveGame from '../../savegame';
 import * as remote from './remote';
 
-interface LoadingState {
+export interface LoadingState {
     type: 'loading';
 }
 
-interface ErrorState {
+export interface ErrorState {
     type: 'error'|'friendlyError';
     message: string;
 }
 
-interface LoadedState {
+export interface LoadedState {
     type: 'loaded';
     saveGames: SaveGame[];
 }
 
 export type AppState = LoadingState | ErrorState | LoadedState;
 
-interface SimpleAction {
+export interface SimpleAction {
     type: 'init';
 }
 
