@@ -38,8 +38,12 @@ function ErrorView(props: BaseAppProps<ErrorState>): JSX.Element {
 function Loaded(props: BaseAppProps<LoadedState>): JSX.Element {
     return (
         <ul>
-          {props.state.saveGames.map(game => (
-              <li>{game.slot} - {game.name}</li>
+          {props.state.saveGames.map(saveGame => (
+              <li>
+                  <button onClick={() => props.dispatch({ type: 'loadgame', saveGame })}>
+                      {saveGame.name}
+                  </button>
+              </li>
           ))}
         </ul>
     );

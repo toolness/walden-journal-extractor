@@ -21,7 +21,12 @@ export interface SimpleAction {
     type: 'init';
 }
 
-export type AppAction = SimpleAction | ErrorState | LoadedState;
+export interface LoadGameAction {
+    type: 'loadgame';
+    saveGame: SaveGame;
+}
+
+export type AppAction = SimpleAction | ErrorState | LoadedState | LoadGameAction;
 
 export type Dispatcher = (action: AppAction|Promise<AppAction>) => void;
 
@@ -52,6 +57,10 @@ async function startLoading(): Promise<AppAction> {
     return { type: 'loaded', saveGames };
 }
 
+async function loadGame(saveGame: SaveGame): Promise<AppAction> {
+    throw new Error('TODO FINISH THIS');
+}
+
 function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): AppState {
     switch (action.type) {
         case 'init':
@@ -62,6 +71,10 @@ function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): 
         case 'error':
         case 'loaded':
         return action;
+
+        case 'loadgame':
+        dispatch(loadGame(action.saveGame));
+        return { type: 'loading' };
     }
 }
 
