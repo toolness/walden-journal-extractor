@@ -23,7 +23,7 @@ interface SimpleAction {
 
 export type AppAction = SimpleAction | ErrorState | LoadedState;
 
-export type Dispatcher = (action: AppAction) => void;
+export type Dispatcher = (action: AppAction|Promise<AppAction>) => void;
 
 export type Renderer = (state: AppState, dispatch: Dispatcher) => void;
 
@@ -52,19 +52,10 @@ async function startLoading(): Promise<AppAction> {
     return { type: 'loaded', saveGames };
 }
 
-function dispatchAsync(promise: Promise<AppAction>, dispatch: Dispatcher) {
-    promise.then(dispatch).catch(e => {
-        dispatch({
-            type: 'error',
-            message: e.message || 'Unknown error'
-        });
-    });
-}
-
 function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): AppState {
     switch (action.type) {
         case 'init':
-        dispatchAsync(startLoading(), dispatch);
+        dispatch(startLoading());
         return { type: 'loading' };
 
         case 'friendlyError':
@@ -85,8 +76,17 @@ export class AppStore {
         this.renderer(this.state, this.dispatch);
     }
 
-    dispatch(action: AppAction) {
-        this.state = applyAction(this.state, action, this.dispatch);
-        this.renderer(this.state, this.dispatch);
+    dispatch(action: AppAction|Promise<AppAction>) {
+        if (action instanceof Promise) {
+            action.then(this.dispatch).catch(e => {
+                this.dispatch({
+                    type: 'error',
+                    message: e.message || 'Unknown error'
+                });
+            });
+        } else {
+            this.state = applyAction(this.state, action, this.dispatch);
+            this.renderer(this.state, this.dispatch);
+        }
     }
 }
