@@ -3,24 +3,24 @@ import Journal from '../../journal';
 import * as remote from './remote';
 
 export interface LoadingState {
-    type: 'loading';
+    readonly type: 'loading';
 }
 
 export interface ErrorState {
-    type: 'error'|'friendlyError';
-    message: string;
+    readonly type: 'error'|'friendlyError';
+    readonly message: string;
 }
 
 export interface LoadedState {
-    type: 'loaded';
-    saveGames: SaveGame[];
+    readonly type: 'loaded';
+    readonly saveGames: SaveGame[];
 }
 
 export interface LoadedJournalState {
-    type: 'loadedjournal';
-    name: string;
-    journal: Journal;
-    log: string[];
+    readonly type: 'loadedjournal';
+    readonly name: string;
+    readonly journal: Journal;
+    readonly log: string[];
 }
 
 export type AppState = LoadingState | ErrorState | LoadedState | LoadedJournalState;
