@@ -3,7 +3,6 @@ import { h, Component, render } from 'preact';
 
 import { AppStore, AppState, ErrorState, LoadedState, Dispatcher,
          LoadedJournalState } from './store';
-import Journal from '../../journal';
 
 interface AppProps<T> {
     state: T;

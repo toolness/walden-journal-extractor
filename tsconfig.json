@@ -1,15 +1,17 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "strictNullChecks": true,
-        "noImplicitAny": true,
+        "strict": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "outDir": "dist",
         "sourceMap": true,
         "target": "es2015",
         "jsx": "react",
-        "jsxFactory": "h",
+        "jsxFactory": "h"
     },
     "include": [
         "src/**/*"
