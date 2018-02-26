@@ -51,16 +51,21 @@ async function startLoading(): Promise<AppAction> {
     }
 
     const saveGameDir = await remote.findSaveGameDir(waldenDir);
+    const noSavedGamesErr: AppAction = {
+        type: 'friendlyError',
+        message: ('Alas, I found the Walden game directory, but I was ' +
+                  'unable to find any saved games.')
+    };
 
     if (!saveGameDir) {
-        return {
-            type: 'friendlyError',
-            message: ('Alas, I found the Walden game directory, but I was ' +
-                      'unable to find any saved games.')
-        };
+        return noSavedGamesErr;
     }
     
     const saveGames = await remote.SaveGame.retrieveAll(saveGameDir);
+
+    if (saveGames.length === 0) {
+        return noSavedGamesErr;
+    }
 
     return { type: 'loaded', saveGames };
 }
