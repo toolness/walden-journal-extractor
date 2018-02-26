@@ -16,31 +16,31 @@ function Loading(): JSX.Element {
     );
 }
 
-function ErrorView(props: BaseAppProps<ErrorState>): JSX.Element {
+function ErrorView({ state, dispatch }: BaseAppProps<ErrorState>): JSX.Element {
     let errInfo: JSX.Element;
 
-    if (props.state.type == 'friendlyError') {
-        errInfo = <p>{props.state.message}</p>;
+    if (state.type == 'friendlyError') {
+        errInfo = <p>{state.message}</p>;
     } else {
-        errInfo = <p>Alas, an error occurred: {props.state.message}</p>;
+        errInfo = <p>Alas, an error occurred: {state.message}</p>;
     }
 
     return (
         <div>
             {errInfo}
-            <button onClick={() => props.dispatch({ type: 'init' })}>
+            <button onClick={() => dispatch({ type: 'init' })}>
               Retry
             </button>
         </div>
     );
 }
 
-function Loaded(props: BaseAppProps<LoadedState>): JSX.Element {
+function Loaded({ state, dispatch }: BaseAppProps<LoadedState>): JSX.Element {
     return (
         <ul>
-          {props.state.saveGames.map(saveGame => (
+          {state.saveGames.map(saveGame => (
               <li>
-                  <button onClick={() => props.dispatch({ type: 'loadgame', saveGame })}>
+                  <button onClick={() => dispatch({ type: 'loadgame', saveGame })}>
                       {saveGame.name}
                   </button>
               </li>
@@ -49,9 +49,7 @@ function Loaded(props: BaseAppProps<LoadedState>): JSX.Element {
     );
 }
 
-function App(props: AppProps): JSX.Element {
-    const { state, dispatch } = props;
-
+function App({ state, dispatch }: AppProps): JSX.Element {
     switch (state.type) {
         case 'loading': return <Loading/>;
 
