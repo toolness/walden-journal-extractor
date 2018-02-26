@@ -4,5 +4,8 @@
 <h1>Walden Journal Extractor</h1>
 <div id="app"></div>
 <script>
-require('./dist/gui/renderer/index.js');
+window.addEventListener('DOMContentLoaded', () => {
+    const appEl = document.getElementById('app');
+    require('./dist/gui/renderer/index.js').start(appEl);
+});
 </script>

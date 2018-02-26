@@ -1,76 +1,48 @@
+import 'source-map-support/register'
 import { h, Component, render } from 'preact';
 
-import SaveGame from '../../savegame';
-import * as remote from './remote';
+import { AppStore, AppState, Dispatcher } from './store';
 
 interface AppProps {
+    state: AppState;
+    dispatch: Dispatcher;
 }
 
-interface LoadingState {
-    type: 'loading';
+function App(props: AppProps): JSX.Element {
+    switch (props.state.type) {
+        case 'loading': return <p>Please wait...</p>;
+        case 'error': return <p>Alas, an error occurred: {props.state.message}</p>;
+        case 'loaded': return (
+            <ul>
+              {props.state.saveGames.map(game => (
+                  <li>{game.slot} - {game.name}</li>
+              ))}
+            </ul>
+        );
+    }
 }
 
-interface ErrorState {
-    type: 'error';
-    message: string;
-}
+type AppWrapperState = AppProps;
 
-interface LoadedState {
-    type: 'loaded';
-    saveGames: SaveGame[];
-}
+export class AppWrapper extends Component<{}, AppWrapperState> {
+    store: AppStore;
 
-type AppState = LoadingState | ErrorState | LoadedState;
-
-export class App extends Component<AppProps, AppState> {
-    constructor(props: AppProps) {
+    constructor(props: {}) {
         super(props);
-        this.state = { type: 'loading' };
+        this.store = new AppStore((state, dispatch) => {
+            this.setState({ state, dispatch });
+        });
     }
 
-    async componentDidMount() {
-        try {
-            const waldenDir = await remote.findWaldenDir();
-
-            if (!waldenDir) {
-                throw new Error('Unable to find Walden game dir!');
-            }
-
-            const saveGameDir = await remote.findSaveGameDir(waldenDir);
-
-            if (!saveGameDir) {
-                throw new Error('Unable to find Walden save game dir!');
-            }
-
-            const saveGames = await remote.SaveGame.retrieveAll(saveGameDir);
-
-            const newState: AppState = {
-                type: 'loaded',
-                saveGames,
-            };
-            this.setState(newState);
-        } catch (e) {
-            const newState: AppState = {
-                type: 'error',
-                message: e.message || 'Unknown error'
-            };
-            this.setState(newState);
-        }
+    componentDidMount() {
+        this.store.dispatch({ type: 'init' });
     }
 
-    render(props: AppProps, state: AppState) {
-        switch (state.type) {
-            case 'loading': return <p>Please wait...</p>;
-            case 'error': return <p>Alas, an error occurred: {state.message}</p>;
-            case 'loaded': return (
-                <ul>
-                  {state.saveGames.map(game => (
-                      <li>{game.slot} - {game.name}</li>
-                  ))}
-                </ul>
-            );
-        }
+    render() {
+        return <App {...this.state}/>;
     }
 }
 
-render(<App/>, document.getElementById('app'));
+export function start(root: HTMLElement) {
+    render(<AppWrapper/>, root);
+}
