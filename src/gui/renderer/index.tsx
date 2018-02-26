@@ -3,6 +3,7 @@ import { h, Component, render } from 'preact';
 
 import { AppStore, AppState, ErrorState, LoadedState, Dispatcher,
          LoadedJournalState } from './store';
+import Journal from '../../journal';
 
 interface AppProps<T> {
     state: T;
@@ -48,11 +49,22 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
     );
 }
 
+function JournalContent(props: { journal: Journal }): JSX.Element {
+    return (
+        <div>
+            {props.journal.nodes.map((node, i) => (
+                h(node.tag, {}, node.text)
+            ))}
+        </div>
+    );
+}
+
 function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.Element {
     return (
         <div>
             <button onClick={() => dispatch({ type: 'init' })}>Back</button>
-            <p>TODO: Implement journal for <strong>{state.name}</strong></p>
+            <p>Journal for <strong>{state.name}</strong></p>
+            <JournalContent journal={state.journal} />
         </div>
     );
 }
