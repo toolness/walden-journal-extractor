@@ -1,12 +1,12 @@
 export type TagType = 'h1'|'h2'|'p';
 
 export interface JournalNode {
-    tag: TagType;
-    text: string;
+    readonly tag: TagType;
+    readonly text: string;
 }
 
 export default class Journal {
-    nodes: JournalNode[];
+    readonly nodes: JournalNode[];
 
     constructor(nodes: JournalNode[]) {
         this.nodes = nodes;
@@ -35,7 +35,8 @@ export default class Journal {
             }
             if (ALL_UNDERSCORES.test(line) && lastLine) {
                 // Convert anything with a '_____' under it into a H2.
-                nodes[nodes.length - 1].tag = 'h2';
+                const lastNode = nodes[nodes.length - 1];
+                nodes[nodes.length - 1] = { ...lastNode, tag: 'h2' };
                 line = '';
             }
             if (line.length) {

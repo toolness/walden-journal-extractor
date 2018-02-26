@@ -1,4 +1,5 @@
 import SaveGame from '../../savegame';
+import Journal from '../../journal';
 import * as remote from './remote';
 
 export interface LoadingState {
@@ -15,7 +16,13 @@ export interface LoadedState {
     saveGames: SaveGame[];
 }
 
-export type AppState = LoadingState | ErrorState | LoadedState;
+export interface LoadedJournalState {
+    type: 'loadedjournal';
+    name: string;
+    journal: Journal;
+}
+
+export type AppState = LoadingState | ErrorState | LoadedState | LoadedJournalState;
 
 export interface SimpleAction {
     type: 'init';
@@ -26,7 +33,8 @@ export interface LoadGameAction {
     saveGame: SaveGame;
 }
 
-export type AppAction = SimpleAction | ErrorState | LoadedState | LoadGameAction;
+export type AppAction = SimpleAction | ErrorState | LoadedState | LoadGameAction |
+                        LoadedJournalState;
 
 export type Dispatcher = (action: AppAction|Promise<AppAction>) => void;
 
@@ -58,7 +66,9 @@ async function startLoading(): Promise<AppAction> {
 }
 
 async function loadGame(saveGame: SaveGame): Promise<AppAction> {
-    throw new Error('TODO FINISH THIS');
+    const journal = await saveGame.getJournal();
+
+    return { type: 'loadedjournal', name: saveGame.name, journal };
 }
 
 function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): AppState {
@@ -70,6 +80,7 @@ function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): 
         case 'friendlyError':
         case 'error':
         case 'loaded':
+        case 'loadedjournal':
         return action;
 
         case 'loadgame':

@@ -1,7 +1,8 @@
 import 'source-map-support/register'
 import { h, Component, render } from 'preact';
 
-import { AppStore, AppState, ErrorState, LoadedState, Dispatcher } from './store';
+import { AppStore, AppState, ErrorState, LoadedState, Dispatcher,
+         LoadedJournalState } from './store';
 
 interface AppProps<T> {
     state: T;
@@ -47,6 +48,15 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
     );
 }
 
+function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.Element {
+    return (
+        <div>
+            <button onClick={() => dispatch({ type: 'init' })}>Back</button>
+            <p>TODO: Implement journal for <strong>{state.name}</strong></p>
+        </div>
+    );
+}
+
 function App({ state, dispatch }: AppProps<AppState>): JSX.Element {
     switch (state.type) {
         case 'loading': return <Loading/>;
@@ -56,6 +66,7 @@ function App({ state, dispatch }: AppProps<AppState>): JSX.Element {
         return <ErrorView {...{ state, dispatch }} />;
 
         case 'loaded': return <Loaded {...{ state, dispatch }} />;
+        case 'loadedjournal': return <LoadedJournal {...{ state, dispatch }} />;
     }
 }
 

@@ -5,9 +5,9 @@ import { parseXML, friendlyGet } from './util';
 import Journal from './journal';
 
 export default class SaveGame {
-    slot: number;
-    path: string;
-    name: string;
+    readonly slot: number;
+    readonly path: string;
+    readonly name: string;
 
     constructor(slot: number, name: string, rootDir: string) {
         this.slot = slot;
