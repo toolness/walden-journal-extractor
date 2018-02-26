@@ -20,6 +20,7 @@ export interface LoadedJournalState {
     type: 'loadedjournal';
     name: string;
     journal: Journal;
+    log: string[];
 }
 
 export type AppState = LoadingState | ErrorState | LoadedState | LoadedJournalState;
@@ -33,8 +34,13 @@ export interface LoadGameAction {
     saveGame: SaveGame;
 }
 
+export interface ExportAction {
+    type: 'export';
+    format: 'clipboard';
+}
+
 export type AppAction = SimpleAction | ErrorState | LoadedState | LoadGameAction |
-                        LoadedJournalState;
+                        LoadedJournalState | ExportAction;
 
 export type Dispatcher = (action: AppAction|Promise<AppAction>) => void;
 
@@ -73,7 +79,15 @@ async function startLoading(): Promise<AppAction> {
 async function loadGame(saveGame: SaveGame): Promise<AppAction> {
     const journal = await saveGame.getJournal();
 
-    return { type: 'loadedjournal', name: saveGame.name, journal };
+    return { type: 'loadedjournal', name: saveGame.name, journal, log: [] };
+}
+
+async function exportJournal(state: LoadedJournalState, action: ExportAction): Promise<AppAction> {
+    switch (action.format) {
+        case 'clipboard':
+        state.journal.toClipboard();
+        return { ...state, log: [...state.log, 'Journal exported to clipboard.'] };
+    }
 }
 
 function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): AppState {
@@ -91,6 +105,14 @@ function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): 
         case 'loadgame':
         dispatch(loadGame(action.saveGame));
         return { type: 'loading' };
+
+        case 'export':
+        if (state.type !== 'loadedjournal') {
+            console.log(`Received ${action.type} action but state is ${state.type}!`);
+            return state;
+        }
+        dispatch(exportJournal(state, action));
+        return state;
     }
 }
 

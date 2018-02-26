@@ -18,6 +18,7 @@
   },
   "optionalDependencies": {
     "electron": "^1.8.2",
-    "preact": "^8.2.7"
+    "preact": "^8.2.7",
+    "preact-render-to-string": "^3.7.0"
   }
 }

@@ -1,3 +1,7 @@
+import { clipboard } from 'electron';
+import { h } from 'preact';
+import { render } from 'preact-render-to-string';
+
 export type TagType = 'h1'|'h2'|'p';
 
 export interface JournalNode {
@@ -20,6 +24,25 @@ export default class Journal {
                 case 'h2': return `## ${node.text}`;
             }
         }).join('\n\n');
+    }
+
+    asJSX(): JSX.Element[] {
+        return this.nodes.map(node => h(node.tag, {}, node.text));
+    }
+
+    asHTML(): string {
+        return render(h('div', {}, this.asJSX()), null, {
+            pretty: true,
+            xml: false,
+            shallow: false
+        });
+    }
+
+    toClipboard() {
+        clipboard.write({
+            text: this.asMarkdown(),
+            html: this.asHTML()
+        });
     }
 
     static fromText(text: string): Journal {

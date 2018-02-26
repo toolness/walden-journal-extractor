@@ -49,22 +49,18 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
     );
 }
 
-function JournalContent(props: { journal: Journal }): JSX.Element {
-    return (
-        <div>
-            {props.journal.nodes.map((node, i) => (
-                h(node.tag, {}, node.text)
-            ))}
-        </div>
-    );
-}
-
 function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.Element {
     return (
         <div>
             <button onClick={() => dispatch({ type: 'init' })}>Back</button>
             <p>Journal for <strong>{state.name}</strong></p>
-            <JournalContent journal={state.journal} />
+            <button onClick={() => dispatch({ type: 'export', format: 'clipboard' })}>
+              Export to clipboard
+            </button>
+            <pre role="log">
+            {state.log.map(msg => <div>{msg}</div>)}
+            </pre>
+            <div>{state.journal.asJSX()}</div>
         </div>
     );
 }
