@@ -1,12 +1,21 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { promisify } from 'util';
 
-import { parseXML, friendlyGet } from './util';
+import { parseXML, friendlyGet, fileExists } from './util';
+import Journal from './journal';
+
+const readFile = promisify(fs.readFile);
+
+async function asyncFilter<T>(things: T[], filter: (item: T) => Promise<boolean>): Promise<T[]> {
+    const filtered = await Promise.all(things.map(filter));
+    return things.filter((_, i) => filtered[i]);
+}
 
 export default class SaveGame {
-    slot: number;
-    path: string;
-    name: string;
+    readonly slot: number;
+    readonly path: string;
+    readonly name: string;
 
     constructor(slot: number, name: string, rootDir: string) {
         this.slot = slot;
@@ -14,18 +23,20 @@ export default class SaveGame {
         this.path = path.join(rootDir, `SaveGame_${slot}.xml`);
     }
 
-    async getJournal(): Promise<string> {
-        const xml = fs.readFileSync(this.path, 'utf-8');
+    async getJournal(): Promise<Journal> {
+        const xml = await readFile(this.path, 'utf-8');
 
-        return friendlyGet(await parseXML(xml), 'SaveGame.writtenJournal.0');
+        const text: string = friendlyGet(await parseXML(xml), 'SaveGame.writtenJournal.0');
+
+        return Journal.fromText(text);
     }
 
     static async retrieveAll(rootDir: string): Promise<SaveGame[]> {
         const listFile = path.join(rootDir, 'SaveGameList.xml');
-        const xml = fs.readFileSync(listFile, 'utf-8');
+        const xml = await readFile(listFile, 'utf-8');
         const content = await parseXML(xml);
 
-        return friendlyGet(content, 'SaveSlotList.SaveSlotList.0.SaveSlot')
+        const games: SaveGame[] = friendlyGet(content, 'SaveSlotList.SaveSlotList.0.SaveSlot')
             .map((obj: any): SaveGame => {
                 const slot = parseInt(friendlyGet(obj, '$.SaveSlot'));
                 const name = friendlyGet(obj, 'saveGameUIName.0');
@@ -40,5 +51,11 @@ export default class SaveGame {
 
                 return new SaveGame(slot, name, rootDir);
             });
+
+        // The Walden save game list actually contains entries for
+        // empty slots, so we need to check for the existence of
+        // a saved game's file to see if it actually represents a
+        // real saved game.
+        return await asyncFilter(games, game => fileExists(game.path));
     }
 }

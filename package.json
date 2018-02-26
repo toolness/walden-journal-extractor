@@ -5,6 +5,7 @@
   "scripts": {
     "start": "tsc --watch",
     "postinstall": "tsc",
+    "gui": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Atul Varma <varmaa@gmail.com>",
@@ -13,6 +14,9 @@
     "@types/xml2js": "^0.4.2",
     "source-map-support": "^0.5.3",
     "typescript": "^2.7.2",
-    "xml2js": "^0.4.19"
+    "xml2js": "^0.4.19",
+    "electron": "^1.8.2",
+    "preact": "^8.2.7",
+    "preact-render-to-string": "^3.7.0"
   }
 }

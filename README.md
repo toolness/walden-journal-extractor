@@ -1,4 +1,5 @@
-This is a simple utility that outputs a [Walden][] save game's journal to Markdown.
+This is a simple utility that allows a [Walden][] save game's journal to be
+exported to a variety of formats.
 
 ## Quick start
 
@@ -13,12 +14,14 @@ npm install
 Then run:
 
 ```
-node dist/cli.js
+npm run gui
 ```
 
-## Example usage
+## Example CLI usage
 
-Running the app without any arguments will show you a list of saved game
+A command-line interface is also available via `node dist/cli.js`.
+
+Running it without any arguments will show you a list of saved game
 slots:
 
 ```bash
@@ -63,6 +66,12 @@ npm start
 
 Note that the project uses [TypeScript][].
 
+In a separate terminal, you can run `npm run gui` to start the
+[Electron][]-based GUI. Any changes you make to the renderer process
+code (generally located in `src/gui/renderer`) will only require a
+page reload in Electron, but changes made to the main process will
+require aborting and re-running `npm run gui`.
+
 ## License
 
 All code is licensed under CC0 (public domain).
@@ -70,3 +79,4 @@ All code is licensed under CC0 (public domain).
 [Walden]: https://www.waldengame.com/
 [NodeJS]: https://nodejs.org/en/
 [TypeScript]: http://www.typescriptlang.org/
+[Electron]: https://electronjs.org/

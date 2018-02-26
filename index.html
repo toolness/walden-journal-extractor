@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Walden Journal Extractor</title>
+<h1>Walden Journal Extractor</h1>
+<div id="app"></div>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    const appEl = document.getElementById('app');
+    require('./dist/gui/renderer/index.js').start(appEl);
+});
+</script>
