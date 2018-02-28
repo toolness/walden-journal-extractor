@@ -14,6 +14,7 @@ function createWindow() {
         height: 600,
         backgroundColor: '#000000',
         resizable: true,
+        autoHideMenuBar: true,
         webPreferences: {
             zoomFactor: 0.75,
         }
