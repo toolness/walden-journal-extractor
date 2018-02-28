@@ -9,7 +9,15 @@ import './rpc-server';
 let win: BrowserWindow | null = null;
 
 function createWindow() {
-    win = new BrowserWindow({ width: 800, height: 600, resizable: false });
+    win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        backgroundColor: '#000000',
+        resizable: true,
+        webPreferences: {
+            zoomFactor: 0.75,
+        }
+    });
 
     win.loadURL(url.format({
         pathname: path.join(__dirname, '..', '..', '..', 'index.html'),

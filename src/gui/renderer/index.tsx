@@ -6,9 +6,18 @@ import { AppStore, AppState, ErrorState, LoadedState, Dispatcher,
          LoadedJournalState } from './store';
 import saveAs from './save-as';
 
+type CssClass =
+    'simple-layout' | 'layout-top' | 'huge-logo' | 'all-caps' | 'layout-bottom' |
+    'unstyled-list' | 'big' | 'tripart-layout' | 'layout-top-left' |
+    'layout-bottom-left' | 'layout-right' | 'journal';
+
 interface AppProps<T> {
     state: T;
     dispatch: Dispatcher;
+}
+
+function cls(...names: CssClass[]): { className: string } {
+    return { className: names.join(' ') };
 }
 
 function Loading(): JSX.Element {
@@ -27,44 +36,74 @@ function ErrorView({ state, dispatch }: AppProps<ErrorState>): JSX.Element {
     }
 
     return (
-        <div>
-            {errInfo}
-            <button onClick={() => dispatch({ type: 'init' })}>
-              Retry
-            </button>
+        <div {...cls('simple-layout')}>
+            <div {...cls('layout-top')}>
+                <h1>Uh oh&hellip;</h1>
+                <p>{errInfo}</p>
+            </div>
+            <ul {...cls('layout-bottom', 'unstyled-list')}>
+                <li>
+                    <button {...cls('big')} onClick={() => dispatch({ type: 'init' })}>
+                    Retry
+                    </button>
+                </li>
+            </ul>
         </div>
     );
 }
 
 function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
     return (
-        <ul>
-          {state.saveGames.map(saveGame => (
-              <li key={saveGame.slot}>
-                  <button onClick={() => dispatch({ type: 'loadgame', saveGame })}>
-                      {saveGame.name}
-                  </button>
-              </li>
-          ))}
-        </ul>
+        <div {...cls('simple-layout')}>
+            <div {...cls('layout-top')}>
+                <h1 {...cls('huge-logo', 'all-caps')}>Walden</h1>
+                <p {...cls('all-caps')}>Journal extractor</p>
+            </div>
+            <ul {...cls('layout-bottom', 'unstyled-list')}>
+            {state.saveGames.map(saveGame => (
+                <li key={saveGame.slot}>
+                    <button {...cls('big')}
+                            onClick={() => dispatch({ type: 'loadgame', saveGame })}>
+                        {saveGame.name}
+                    </button>
+                </li>
+            ))}
+            </ul>
+        </div>
     );
 }
 
 function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.Element {
     return (
-        <div>
-            <button onClick={() => dispatch({ type: 'init' })}>Back</button>
-            <p>Journal for <strong>{state.name}</strong></p>
-            <button onClick={() => dispatch({ type: 'export', format: 'clipboard' })}>
-              Copy to clipboard
-            </button>
-            <button onClick={() => saveAs('html', state.name, dispatch)}>
-              Save as HTML
-            </button>
-            <pre role="log">
-            {state.log.map((msg, i) => <div key={i}>{msg}</div>)}
-            </pre>
-            <div>{state.journal.asJSX()}</div>
+        <div {...cls('tripart-layout')}>
+            <div {...cls('layout-top-left')}>
+                <h1>{state.name}</h1>
+                <pre role="log">
+                {state.log.map((msg, i) => <div key={i}>{msg}</div>)}
+                </pre>
+            </div>
+            <ul {...cls('layout-bottom-left', 'unstyled-list')}>
+                <li>
+                    <button {...cls('big')}
+                            onClick={() => dispatch({ type: 'export', format: 'clipboard' })}>
+                        Copy to clipboard
+                    </button>
+                </li>
+                <li>
+                    <button {...cls('big')}
+                            onClick={() => saveAs('html', state.name, dispatch)}>
+                        Save as HTML
+                    </button>
+                </li>
+                <li>
+                    <button {...cls('big')} onClick={() => dispatch({ type: 'init' })}>
+                        Back
+                    </button>
+                </li>
+            </ul>
+            <div {...cls('layout-right', 'journal')}>
+                {state.journal.asJSX({ topHeading: 'h2' })}
+            </div>
         </div>
     );
 }

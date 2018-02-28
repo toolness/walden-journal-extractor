@@ -1,0 +1,144 @@
+@font-face {
+    font-family: 'abelregular';
+    src: url('fonts/abel-regular-webfont.woff');
+    src: url('fonts/abel-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sourcecodepro';
+    src: url('fonts/SourceCodePro-Light.otf');
+    src: url('fonts/SourceCodePro-Light.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --fg-color: white;
+    --bg-color: black;
+    --margin-size: 20px;
+    --base-font: 'sourcecodepro', monospace;
+    --heading-font: 'abelregular', Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-color);
+    color: var(--fg-color);
+    font-family: var(--base-font);
+}
+
+.all-caps {
+    text-transform: uppercase;
+}
+
+.huge-logo {
+    font-size: 96px;
+}
+
+h1, h2, h3 {
+    font-family: var(--heading-font);
+    font-weight: 400;
+}
+
+html, body, #app {
+    height: 100%;
+}
+
+.simple-layout .layout-top {
+    grid-area: top;
+    text-align: center;
+}
+
+.simple-layout .layout-bottom {
+    grid-area: bottom;
+    justify-self: stretch;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.tripart-layout .layout-top-left {
+    grid-area: top-left;
+    align-self: start;
+    padding-left: var(--margin-size);
+}
+
+.tripart-layout .layout-bottom-left {
+    grid-area: bottom-left;
+    align-self: end;
+    padding-left: var(--margin-size);
+    width: 100%;
+}
+
+.tripart-layout .layout-right {
+    grid-area: right;
+    overflow-y: scroll;
+    padding-right: var(--margin-size);
+}
+
+.journal {
+    color: #f0f0f0;
+}
+
+.journal p {
+    font-size: 14px;
+}
+
+.unstyled-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+button.big:hover {
+    color: var(--bg-color);
+    background: var(--fg-color);
+}
+
+button.big:focus {
+    border: 2px dashed var(--fg-color);
+    outline: none;
+}
+
+button.big {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    margin: var(--margin-size) 0;
+    border: 2px solid var(--fg-color);
+    text-transform: uppercase;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.simple-layout {
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: auto;
+    grid-template-areas:
+      "top"
+      "bottom";
+}
+
+.tripart-layout {
+    height: 100%;
+    display: grid;
+    justify-items: left;
+    grid-column-gap: var(--margin-size);
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "top-left    right"
+      "bottom-left right";
+}

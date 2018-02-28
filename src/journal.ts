@@ -9,11 +9,29 @@ import * as journalHtml from './journal-html';
 
 const writeFile = promisify(fs.writeFile);
 
-export type TagType = 'h1'|'h2'|'p';
+export type HeadingTagType = 'h1'|'h2';
+
+export type TagType = HeadingTagType|'p';
 
 export interface JournalNode {
     readonly tag: TagType;
     readonly text: string;
+}
+
+function heading(tag: TagType, topHeading: HeadingTagType): string {
+    if (topHeading === 'h1') {
+        return tag;
+    }
+
+    switch (tag) {
+        case 'h1': return 'h2';
+        case 'h2': return 'h3';
+        default: return tag;
+    }
+}
+
+interface JSXOptions {
+    topHeading: HeadingTagType;
 }
 
 export default class Journal {
@@ -33,10 +51,13 @@ export default class Journal {
         }).join('\n\n');
     }
 
-    asJSX(): JSX.Element[] {
-        return this.nodes.map((node, i) => React.createElement(node.tag, {
-            key: i
-        }, node.text));
+    asJSX(options: JSXOptions = { topHeading: 'h1' }): JSX.Element[] {
+        return this.nodes.map((node, i) => {
+            const tag = heading(node.tag, options.topHeading);
+            return React.createElement(tag, {
+                key: i
+            }, node.text)
+        });
     }
 
     asHTML(): string {
