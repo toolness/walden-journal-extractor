@@ -136,6 +136,7 @@ button.big {
 
 .simple-layout {
     height: 100%;
+    padding: 0 var(--margin-size);
     display: grid;
     justify-items: center;
     align-items: center;
