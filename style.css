@@ -39,6 +39,15 @@ body {
     font-family: var(--base-font);
 }
 
+pre {
+    font-family: var(--base-font);
+    white-space: pre-wrap;
+}
+
+pre[role="log"] {
+    color: yellow;
+}
+
 .all-caps {
     text-transform: uppercase;
 }
