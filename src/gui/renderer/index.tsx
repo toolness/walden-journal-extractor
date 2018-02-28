@@ -22,7 +22,12 @@ function cls(...names: CssClass[]): { className: string } {
 
 function Loading(): JSX.Element {
     return (
-        <p>Please wait...</p>
+        <div {...cls('simple-layout')}>
+            <div {...cls('layout-top')}>
+                <h1>Please wait&hellip;</h1>
+            </div>
+            <div {...cls('layout-bottom')}></div>
+        </div>
     );
 }
 
