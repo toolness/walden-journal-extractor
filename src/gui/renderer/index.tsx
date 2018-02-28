@@ -1,5 +1,6 @@
 import 'source-map-support/register'
-import { h, Component, render } from 'preact';
+import * as React from 'react';
+import { render } from 'react-dom';
 
 import { AppStore, AppState, ErrorState, LoadedState, Dispatcher,
          LoadedJournalState } from './store';
@@ -39,7 +40,7 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
     return (
         <ul>
           {state.saveGames.map(saveGame => (
-              <li>
+              <li key={saveGame.slot}>
                   <button onClick={() => dispatch({ type: 'loadgame', saveGame })}>
                       {saveGame.name}
                   </button>
@@ -61,7 +62,7 @@ function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.E
               Save as HTML
             </button>
             <pre role="log">
-            {state.log.map(msg => <div>{msg}</div>)}
+            {state.log.map((msg, i) => <div key={i}>{msg}</div>)}
             </pre>
             <div>{state.journal.asJSX()}</div>
         </div>
@@ -81,27 +82,9 @@ function App({ state, dispatch }: AppProps<AppState>): JSX.Element {
     }
 }
 
-type AppWrapperState = AppProps<AppState>;
-
-export class AppWrapper extends Component<{}, AppWrapperState> {
-    store: AppStore;
-
-    constructor(props: {}) {
-        super(props);
-        this.store = new AppStore((state, dispatch) => {
-            this.setState({ state, dispatch });
-        });
-    }
-
-    componentDidMount() {
-        this.store.dispatch({ type: 'init' });
-    }
-
-    render() {
-        return <App {...this.state}/>;
-    }
-}
-
 export function start(root: HTMLElement) {
-    render(<AppWrapper/>, root);
+    const store = new AppStore((state, dispatch) => {
+        render(<App state={state} dispatch={dispatch} />, root);
+    });
+    store.dispatch({ type: 'init' });
 }

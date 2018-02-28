@@ -2,8 +2,10 @@ import * as fs from 'fs';
 import { promisify } from 'util';
 
 import { clipboard } from 'electron';
-import { h } from 'preact';
-import { render } from 'preact-render-to-string';
+import * as React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+
+import * as journalHtml from './journal-html';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -32,15 +34,13 @@ export default class Journal {
     }
 
     asJSX(): JSX.Element[] {
-        return this.nodes.map(node => h(node.tag, {}, node.text));
+        return this.nodes.map((node, i) => React.createElement(node.tag, {
+            key: i
+        }, node.text));
     }
 
     asHTML(): string {
-        return render(h('div', {}, this.asJSX()), null, {
-            pretty: true,
-            xml: false,
-            shallow: false
-        });
+        return renderToStaticMarkup(journalHtml.fragment(this.asJSX()));
     }
 
     toClipboard() {
@@ -57,20 +57,8 @@ export default class Journal {
             title = this.nodes[0].text;
         }
 
-        const html = [
-            '<!DOCTYPE html>',
-            '<html lang="en">',
-            '<head>',
-            '\t<meta charset="utf-8">',
-            `\t<title>${title}</title>`,
-            '</head>',
-            render(h('body', {}, this.asJSX()), null, {
-                pretty: true,
-                xml: false,
-                shallow: false
-            }),
-            '</html>',
-        ].join('\n');
+        const jsx = journalHtml.page(title, this.asJSX());
+        const html = '<!DOCTYPE html>\n' + renderToStaticMarkup(jsx);
         return writeFile(path, html, 'utf-8');
     }
 
