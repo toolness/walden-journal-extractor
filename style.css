@@ -1,6 +1,7 @@
 :root {
     --fg-color: white;
     --bg-color: black;
+    --margin-size: 20px;
 }
 
 * {
@@ -18,20 +19,44 @@ html, body, #app {
     height: 100%;
 }
 
-.layout-top {
+.simple-layout .layout-top {
     grid-area: top;
+}
+
+.simple-layout .layout-bottom {
+    grid-area: bottom;
+    justify-self: stretch;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.tripart-layout .layout-top-left {
+    grid-area: top-left;
+    align-self: start;
+    padding-left: var(--margin-size);
+}
+
+.tripart-layout .layout-bottom-left {
+    grid-area: bottom-left;
+    align-self: end;
+    padding-left: var(--margin-size);
+    width: 100%;
+}
+
+.tripart-layout .layout-right {
+    grid-area: right;
+    overflow-y: scroll;
+    padding-right: var(--margin-size);
+}
+
+.journal {
+    font-family: cursive;
 }
 
 .unstyled-list {
     list-style-type: none;
     padding-left: 0;
-}
-
-.layout-bottom {
-    grid-area: bottom;
-    justify-self: stretch;
-    width: 50%;
-    margin: 0 auto;
+    margin: 0;
 }
 
 button.big:hover {
@@ -48,7 +73,7 @@ button.big {
     display: block;
     width: 100%;
     padding: 10px 0;
-    margin: 10px 0;
+    margin: var(--margin-size) 0;
     border: 1px solid var(--fg-color);
     background: transparent;
     color: inherit;
@@ -66,4 +91,16 @@ button.big {
     grid-template-areas:
       "top"
       "bottom";
+}
+
+.tripart-layout {
+    height: 100%;
+    display: grid;
+    justify-items: left;
+    grid-column-gap: var(--margin-size);
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "top-left    right"
+      "bottom-left right";
 }
