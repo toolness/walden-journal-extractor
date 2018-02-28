@@ -102,7 +102,7 @@ function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.E
                 </li>
             </ul>
             <div {...cls('layout-right', 'journal')}>
-                {state.journal.asJSX()}
+                {state.journal.asJSX({ topHeading: 'h2' })}
             </div>
         </div>
     );
