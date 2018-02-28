@@ -97,6 +97,18 @@ export default class Journal {
         });
     }
 
+    toDocxFile(path: string): Promise<void> {
+        const doc = this.asDocx();
+        const exporter = new docx.LocalPacker(doc);
+        return exporter.pack(path);
+    }
+
+    toPDFFile(path: string): Promise<void> {
+        const doc = this.asDocx();
+        const exporter = new docx.LocalPacker(doc);
+        return exporter.packPdf(path);
+    }
+
     toHTMLFile(path: string): Promise<void> {
         let title = 'Untitled Journal';
 
