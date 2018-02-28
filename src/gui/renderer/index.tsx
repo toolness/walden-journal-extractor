@@ -3,6 +3,7 @@ import { h, Component, render } from 'preact';
 
 import { AppStore, AppState, ErrorState, LoadedState, Dispatcher,
          LoadedJournalState } from './store';
+import saveAs from './save-as';
 
 interface AppProps<T> {
     state: T;
@@ -54,7 +55,10 @@ function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.E
             <button onClick={() => dispatch({ type: 'init' })}>Back</button>
             <p>Journal for <strong>{state.name}</strong></p>
             <button onClick={() => dispatch({ type: 'export', format: 'clipboard' })}>
-              Export to clipboard
+              Copy to clipboard
+            </button>
+            <button onClick={() => saveAs('html', state.name, dispatch)}>
+              Save as HTML
             </button>
             <pre role="log">
             {state.log.map(msg => <div>{msg}</div>)}

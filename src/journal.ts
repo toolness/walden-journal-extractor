@@ -1,6 +1,11 @@
+import * as fs from 'fs';
+import { promisify } from 'util';
+
 import { clipboard } from 'electron';
 import { h } from 'preact';
 import { render } from 'preact-render-to-string';
+
+const writeFile = promisify(fs.writeFile);
 
 export type TagType = 'h1'|'h2'|'p';
 
@@ -43,6 +48,30 @@ export default class Journal {
             text: this.asMarkdown(),
             html: this.asHTML()
         });
+    }
+
+    toHTMLFile(path: string): Promise<void> {
+        let title = 'Untitled Journal';
+
+        if (this.nodes[0] && this.nodes[0].tag === 'h1') {
+            title = this.nodes[0].text;
+        }
+
+        const html = [
+            '<!DOCTYPE html>',
+            '<html lang="en">',
+            '<head>',
+            '\t<meta charset="utf-8">',
+            `\t<title>${title}</title>`,
+            '</head>',
+            render(h('body', {}, this.asJSX()), null, {
+                pretty: true,
+                xml: false,
+                shallow: false
+            }),
+            '</html>',
+        ].join('\n');
+        return writeFile(path, html, 'utf-8');
     }
 
     static fromText(text: string): Journal {

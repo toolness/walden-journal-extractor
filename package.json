@@ -12,11 +12,12 @@
   "license": "CC0-1.0",
   "dependencies": {
     "@types/xml2js": "^0.4.2",
-    "source-map-support": "^0.5.3",
-    "typescript": "^2.7.2",
-    "xml2js": "^0.4.19",
     "electron": "^1.8.2",
     "preact": "^8.2.7",
-    "preact-render-to-string": "^3.7.0"
+    "preact-render-to-string": "^3.7.0",
+    "slugify": "^1.2.9",
+    "source-map-support": "^0.5.3",
+    "typescript": "^2.7.2",
+    "xml2js": "^0.4.19"
   }
 }

@@ -34,10 +34,20 @@ export interface LoadGameAction {
     saveGame: SaveGame;
 }
 
-export interface ExportAction {
+export interface ExportToClipboardAction {
     type: 'export';
     format: 'clipboard';
 }
+
+export type FileFormat = 'html';
+
+export interface ExportToFileAction {
+    type: 'export';
+    format: FileFormat;
+    path: string;
+}
+
+export type ExportAction = ExportToClipboardAction | ExportToFileAction;
 
 export type AppAction = SimpleAction | ErrorState | LoadedState | LoadGameAction |
                         LoadedJournalState | ExportAction;
@@ -87,6 +97,10 @@ async function exportJournal(state: LoadedJournalState, action: ExportAction): P
         case 'clipboard':
         state.journal.toClipboard();
         return { ...state, log: [...state.log, 'Journal exported to clipboard.'] };
+
+        case 'html':
+        await state.journal.toHTMLFile(action.path);
+        return { ...state, log: [...state.log, `Journal exported to ${action.path}.`] };
     }
 }
 
