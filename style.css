@@ -26,9 +26,15 @@
     box-sizing: border-box;
 }
 
+html {
+    background-color: var(--bg-color);
+    background-image: url(background.jpg);
+    background-size: cover;
+}
+
 body {
+    background-color: rgba(0, 0, 0, 0.5);
     margin: 0;
-    background: var(--bg-color);
     color: var(--fg-color);
     font-family: var(--base-font);
 }
