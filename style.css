@@ -1,7 +1,25 @@
+@font-face {
+    font-family: 'abelregular';
+    src: url('fonts/abel-regular-webfont.woff');
+    src: url('fonts/abel-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sourcecodepro';
+    src: url('fonts/SourceCodePro-Light.otf');
+    src: url('fonts/SourceCodePro-Light.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --fg-color: white;
     --bg-color: black;
     --margin-size: 20px;
+    --base-font: 'sourcecodepro', monospace;
+    --heading-font: 'abelregular', Arial, Helvetica, sans-serif;
 }
 
 * {
@@ -12,7 +30,20 @@ body {
     margin: 0;
     background: var(--bg-color);
     color: var(--fg-color);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--base-font);
+}
+
+.all-caps {
+    text-transform: uppercase;
+}
+
+.huge-logo {
+    font-size: 96px;
+}
+
+h1, h2 {
+    font-family: var(--heading-font);
+    font-weight: 400;
 }
 
 html, body, #app {
@@ -21,6 +52,7 @@ html, body, #app {
 
 .simple-layout .layout-top {
     grid-area: top;
+    text-align: center;
 }
 
 .simple-layout .layout-bottom {
@@ -50,7 +82,11 @@ html, body, #app {
 }
 
 .journal {
-    font-family: cursive;
+    color: #f0f0f0;
+}
+
+.journal p {
+    font-size: 14px;
 }
 
 .unstyled-list {
@@ -65,7 +101,7 @@ button.big:hover {
 }
 
 button.big:focus {
-    border: 1px dashed var(--fg-color);
+    border: 2px dashed var(--fg-color);
     outline: none;
 }
 
@@ -74,11 +110,13 @@ button.big {
     width: 100%;
     padding: 10px 0;
     margin: var(--margin-size) 0;
-    border: 1px solid var(--fg-color);
+    border: 2px solid var(--fg-color);
+    text-transform: uppercase;
     background: transparent;
     color: inherit;
     cursor: pointer;
     font-family: inherit;
+    font-size: inherit;
 }
 
 .simple-layout {
