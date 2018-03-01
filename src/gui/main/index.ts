@@ -15,6 +15,7 @@ function createWindow() {
         backgroundColor: '#000000',
         resizable: true,
         autoHideMenuBar: true,
+        show: false,
         webPreferences: {
             zoomFactor: 0.75,
         }
@@ -30,6 +31,12 @@ function createWindow() {
 
     win.on('closed', () => {
         win = null;
+    });
+
+    win.once('ready-to-show', () => {
+        if (win) {
+            win.show();
+        }
     });
 }
 
