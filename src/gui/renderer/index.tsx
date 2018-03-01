@@ -87,13 +87,17 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
 }
 
 function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.Element {
+    let logMsg = '';
+
+    if (state.log.length > 0) {
+        logMsg = state.log[state.log.length - 1];
+    }
+
     return (
         <div {...cls('tripart-layout')}>
             <div {...cls('layout-top-left')}>
                 <h1>{state.name}</h1>
-                <pre role="log">
-                {state.log.map((msg, i) => <div key={i}>{msg}</div>)}
-                </pre>
+                <pre role="log">{logMsg}</pre>
             </div>
             <ul {...cls('layout-bottom-left', 'unstyled-list')}>
                 <BigListButton disabled={state.isBusy}
