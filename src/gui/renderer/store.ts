@@ -21,6 +21,7 @@ export interface LoadedJournalState {
     readonly name: string;
     readonly journal: Journal;
     readonly log: string[];
+    readonly isBusy: boolean;
 }
 
 export type AppState = LoadingState | ErrorState | LoadedState | LoadedJournalState;
@@ -89,26 +90,32 @@ async function startLoading(): Promise<AppAction> {
 async function loadGame(saveGame: SaveGame): Promise<AppAction> {
     const journal = await saveGame.getJournal();
 
-    return { type: 'loadedjournal', name: saveGame.name, journal, log: [] };
+    return { type: 'loadedjournal', name: saveGame.name, journal, log: [], isBusy: false };
 }
 
 async function exportJournal(state: LoadedJournalState, action: ExportAction): Promise<AppAction> {
+    const done = (dest: string) => ({
+        ...state,
+        log: [...state.log, `Journal exported to ${dest}.`],
+        isDone: true
+    });
+
     switch (action.format) {
         case 'clipboard':
         state.journal.toClipboard();
-        return { ...state, log: [...state.log, 'Journal exported to clipboard.'] };
+        return done('clipboard');
 
         case 'html':
         await state.journal.toHTMLFile(action.path);
-        return { ...state, log: [...state.log, `Journal exported to ${action.path}.`] };
+        return done(action.path);
 
         case 'docx':
         await state.journal.toDocxFile(action.path);
-        return { ...state, log: [...state.log, `Journal exported to ${action.path}.`] };
+        return done(action.path);
 
         case 'pdf':
         await state.journal.toPDFFile(action.path);
-        return { ...state, log: [...state.log, `Journal exported to ${action.path}.`] };
+        return done(action.path);
     }
 }
 
@@ -134,7 +141,7 @@ function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): 
             return state;
         }
         dispatch(exportJournal(state, action));
-        return state;
+        return {...state, isBusy: true};
     }
 }
 

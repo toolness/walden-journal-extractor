@@ -20,10 +20,17 @@ function cls(...names: CssClass[]): { className: string } {
     return { className: names.join(' ') };
 }
 
-function BigListButton(props: { onClick: () => void, label: string }): JSX.Element {
+interface BigListButtonProps {
+    onClick: () => void;
+    label: string;
+    disabled?: boolean;
+}
+
+function BigListButton(props: BigListButtonProps): JSX.Element {
     return (
         <li>
-            <button {...cls('big')} onClick={props.onClick}>{props.label}</button>
+            <button {...cls('big')} onClick={props.onClick}
+                    disabled={props.disabled}>{props.label}</button>
         </li>
     );
 }
@@ -89,19 +96,19 @@ function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.E
                 </pre>
             </div>
             <ul {...cls('layout-bottom-left', 'unstyled-list')}>
-                <BigListButton
+                <BigListButton disabled={state.isBusy}
                     onClick={() => dispatch({ type: 'export', format: 'clipboard' })}
                     label="Copy to clipboard"/>
-                <BigListButton
+                <BigListButton disabled={state.isBusy}
                     onClick={() => saveAs('docx', state.name, dispatch)}
                     label="Save as MS Word"/>
-                <BigListButton
+                <BigListButton disabled={state.isBusy}
                     onClick={() => saveAs('pdf', state.name, dispatch)}
                     label="Save as PDF"/>
-                <BigListButton
+                <BigListButton disabled={state.isBusy}
                     onClick={() => saveAs('html', state.name, dispatch)}
                     label="Save as HTML"/>
-                <BigListButton
+                <BigListButton disabled={state.isBusy}
                     onClick={() => dispatch({ type: 'init' })}
                     label="Back"/>
             </ul>

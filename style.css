@@ -110,9 +110,14 @@ html, body, #app {
     margin: 0;
 }
 
-button.big:hover {
+button.big:hover:not(:disabled) {
     color: var(--bg-color);
     background: var(--fg-color);
+}
+
+button.big:disabled {
+    opacity: 0.5;
+    cursor: default;
 }
 
 button.big:focus {
@@ -121,6 +126,7 @@ button.big:focus {
 }
 
 button.big {
+    transition: opacity 0.5s;
     display: block;
     width: 100%;
     padding: 10px 0;
