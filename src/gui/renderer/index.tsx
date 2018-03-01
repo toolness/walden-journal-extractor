@@ -61,7 +61,7 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
     return (
         <div {...cls('simple-layout')}>
             <div {...cls('layout-top')}>
-                <h1 {...cls('huge-logo', 'all-caps')}>Walden</h1>
+                <h1 {...cls('huge-logo', 'all-caps')}>Walden, A Game</h1>
                 <p {...cls('all-caps')}>Journal extractor</p>
             </div>
             <ul {...cls('layout-bottom', 'unstyled-list')}>
