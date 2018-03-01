@@ -96,6 +96,18 @@ function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.E
                 </li>
                 <li>
                     <button {...cls('big')}
+                            onClick={() => saveAs('docx', state.name, dispatch)}>
+                        Save as MS Word
+                    </button>
+                </li>
+                <li>
+                    <button {...cls('big')}
+                            onClick={() => saveAs('pdf', state.name, dispatch)}>
+                        Save as PDF
+                    </button>
+                </li>
+                <li>
+                    <button {...cls('big')}
                             onClick={() => saveAs('html', state.name, dispatch)}>
                         Save as HTML
                     </button>
