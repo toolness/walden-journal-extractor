@@ -20,6 +20,14 @@ function cls(...names: CssClass[]): { className: string } {
     return { className: names.join(' ') };
 }
 
+function BigListButton(props: { onClick: () => void, label: string }): JSX.Element {
+    return (
+        <li>
+            <button {...cls('big')} onClick={props.onClick}>{props.label}</button>
+        </li>
+    );
+}
+
 function Loading(): JSX.Element {
     return (
         <div {...cls('simple-layout')}>
@@ -47,11 +55,7 @@ function ErrorView({ state, dispatch }: AppProps<ErrorState>): JSX.Element {
                 <p>{errInfo}</p>
             </div>
             <ul {...cls('layout-bottom', 'unstyled-list')}>
-                <li>
-                    <button {...cls('big')} onClick={() => dispatch({ type: 'init' })}>
-                    Retry
-                    </button>
-                </li>
+                <BigListButton onClick={() => dispatch({ type: 'init' })} label="Retry"/>
             </ul>
         </div>
     );
@@ -66,12 +70,9 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
             </div>
             <ul {...cls('layout-bottom', 'unstyled-list')}>
             {state.saveGames.map(saveGame => (
-                <li key={saveGame.slot}>
-                    <button {...cls('big')}
-                            onClick={() => dispatch({ type: 'loadgame', saveGame })}>
-                        {saveGame.name}
-                    </button>
-                </li>
+                <BigListButton key={saveGame.slot}
+                    onClick={() => dispatch({ type: 'loadgame', saveGame })}
+                    label={saveGame.name} />
             ))}
             </ul>
         </div>
@@ -88,35 +89,21 @@ function LoadedJournal({ state, dispatch }: AppProps<LoadedJournalState>): JSX.E
                 </pre>
             </div>
             <ul {...cls('layout-bottom-left', 'unstyled-list')}>
-                <li>
-                    <button {...cls('big')}
-                            onClick={() => dispatch({ type: 'export', format: 'clipboard' })}>
-                        Copy to clipboard
-                    </button>
-                </li>
-                <li>
-                    <button {...cls('big')}
-                            onClick={() => saveAs('docx', state.name, dispatch)}>
-                        Save as MS Word
-                    </button>
-                </li>
-                <li>
-                    <button {...cls('big')}
-                            onClick={() => saveAs('pdf', state.name, dispatch)}>
-                        Save as PDF
-                    </button>
-                </li>
-                <li>
-                    <button {...cls('big')}
-                            onClick={() => saveAs('html', state.name, dispatch)}>
-                        Save as HTML
-                    </button>
-                </li>
-                <li>
-                    <button {...cls('big')} onClick={() => dispatch({ type: 'init' })}>
-                        Back
-                    </button>
-                </li>
+                <BigListButton
+                    onClick={() => dispatch({ type: 'export', format: 'clipboard' })}
+                    label="Copy to clipboard"/>
+                <BigListButton
+                    onClick={() => saveAs('docx', state.name, dispatch)}
+                    label="Save as MS Word"/>
+                <BigListButton
+                    onClick={() => saveAs('pdf', state.name, dispatch)}
+                    label="Save as PDF"/>
+                <BigListButton
+                    onClick={() => saveAs('html', state.name, dispatch)}
+                    label="Save as HTML"/>
+                <BigListButton
+                    onClick={() => dispatch({ type: 'init' })}
+                    label="Back"/>
             </ul>
             <div {...cls('layout-right', 'journal')}>
                 {state.journal.asJSX({ topHeading: 'h2' })}
