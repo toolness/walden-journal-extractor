@@ -11,16 +11,18 @@
   "author": "Atul Varma <varmaa@gmail.com>",
   "license": "CC0-1.0",
   "dependencies": {
-    "@types/react": "^16.0.38",
-    "@types/react-dom": "^16.0.4",
-    "@types/xml2js": "^0.4.2",
     "docx": "^3.2.0",
     "electron": "^1.8.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "slugify": "^1.2.9",
     "source-map-support": "^0.5.3",
-    "typescript": "^2.7.2",
     "xml2js": "^0.4.19"
+  },
+  "devDependencies": {
+    "@types/react": "^16.0.38",
+    "@types/react-dom": "^16.0.4",
+    "@types/xml2js": "^0.4.2",
+    "typescript": "^2.7.2"
   }
 }
