@@ -39,7 +39,7 @@ export interface ExportToClipboardAction {
     format: 'clipboard';
 }
 
-export type FileFormat = 'html';
+export type FileFormat = 'html'|'docx'|'pdf';
 
 export interface ExportToFileAction {
     type: 'export';
@@ -100,6 +100,14 @@ async function exportJournal(state: LoadedJournalState, action: ExportAction): P
 
         case 'html':
         await state.journal.toHTMLFile(action.path);
+        return { ...state, log: [...state.log, `Journal exported to ${action.path}.`] };
+
+        case 'docx':
+        await state.journal.toDocxFile(action.path);
+        return { ...state, log: [...state.log, `Journal exported to ${action.path}.`] };
+
+        case 'pdf':
+        await state.journal.toPDFFile(action.path);
         return { ...state, log: [...state.log, `Journal exported to ${action.path}.`] };
     }
 }

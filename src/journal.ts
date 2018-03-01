@@ -4,6 +4,7 @@ import { promisify } from 'util';
 import { clipboard } from 'electron';
 import * as React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import * as docx from 'docx';
 
 import * as journalHtml from './journal-html';
 
@@ -30,6 +31,16 @@ function heading(tag: TagType, topHeading: HeadingTagType): string {
     }
 }
 
+function toDocxTextRun(node: JournalNode): docx.TextRun {
+    const run = new docx.TextRun(node.text);
+
+    switch (node.tag) {
+        case 'h1': return run.bold().size(48);
+        case 'h2': return run.bold().size(36);
+        case 'p': return run;
+    }
+}
+
 interface JSXOptions {
     topHeading: HeadingTagType;
 }
@@ -51,6 +62,21 @@ export default class Journal {
         }).join('\n\n');
     }
 
+    asDocx(): docx.Document {
+        const doc = new docx.Document();
+
+        this.nodes.forEach((node, i) => {
+            if (i > 0) {
+                doc.addParagraph(new docx.Paragraph());
+            }
+
+            const textRun = toDocxTextRun(node);
+            doc.addParagraph(new docx.Paragraph().addRun(textRun));
+        });
+
+        return doc;
+    }
+
     asJSX(options: JSXOptions = { topHeading: 'h1' }): JSX.Element[] {
         return this.nodes.map((node, i) => {
             const tag = heading(node.tag, options.topHeading);
@@ -69,6 +95,18 @@ export default class Journal {
             text: this.asMarkdown(),
             html: this.asHTML()
         });
+    }
+
+    toDocxFile(path: string): Promise<void> {
+        const doc = this.asDocx();
+        const exporter = new docx.LocalPacker(doc);
+        return exporter.pack(path);
+    }
+
+    toPDFFile(path: string): Promise<void> {
+        const doc = this.asDocx();
+        const exporter = new docx.LocalPacker(doc);
+        return exporter.packPdf(path);
     }
 
     toHTMLFile(path: string): Promise<void> {
