@@ -8,6 +8,9 @@ import './rpc-server';
 
 let win: BrowserWindow | null = null;
 
+// Taken from https://github.com/sindresorhus/electron-is-dev.
+const isDev = /node_modules[\\/]electron[\\/]/.test(process.execPath);
+
 function createWindow() {
     win = new BrowserWindow({
         width: 800,
@@ -27,7 +30,9 @@ function createWindow() {
         slashes: true,
     }));
 
-    win.webContents.openDevTools();
+    if (isDev) {
+        win.webContents.openDevTools();
+    }
 
     win.on('closed', () => {
         win = null;

@@ -2,17 +2,18 @@
   "name": "walden-extractor",
   "version": "1.0.0",
   "description": "Journal extractor for waldengame.com",
+  "productName": "Walden Journal Extractor",
   "scripts": {
     "start": "tsc --watch",
     "postinstall": "tsc",
     "gui": "electron .",
+    "package": "tsc && electron-packager .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Atul Varma <varmaa@gmail.com>",
   "license": "CC0-1.0",
   "dependencies": {
     "docx": "^3.2.0",
-    "electron": "^1.8.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "slugify": "^1.2.9",
@@ -23,6 +24,8 @@
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
     "@types/xml2js": "^0.4.2",
+    "electron": "^1.8.2",
+    "electron-packager": "^11.0.1",
     "typescript": "^2.7.2"
   }
 }
