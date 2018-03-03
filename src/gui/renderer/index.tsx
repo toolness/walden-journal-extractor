@@ -146,7 +146,7 @@ function getFadeTime(): number {
 
 interface AppFaderState {
     shownState: AppState;
-    fadeIn: boolean;
+    show: boolean;
     isFadedOut: boolean;
     fadeTime: number;
 }
@@ -169,22 +169,21 @@ class AppFader extends React.Component<AppProps<AppState>, AppFaderState> {
 
         this.setState({
             shownState: this.props.state,
-            fadeIn: false,
+            show: false,
             isFadedOut: true,
             fadeTime: getFadeTime()
         });
     }
 
     componentWillReceiveProps(nextProps: AppProps<AppState>) {
-        const { shownState, fadeIn, isFadedOut } = this.state;
-        const fadeOut = !fadeIn;
-        const isFadingOut = fadeOut && !isFadedOut;
+        const { shownState, show, isFadedOut } = this.state;
+        const isFadingOut = !show && !isFadedOut;
         if (shownState.type !== 'loading' && nextProps.state.type === 'loading') {
             // We've just moved from an interactive state to a loading
             // state; keep showing the interactive state, but start
             // fading out.
             this.setState({
-                fadeIn: false,
+                show: false,
                 isFadedOut: false
             });
         } else if (!isFadingOut && nextProps.state.type !== 'loading') {
@@ -192,7 +191,7 @@ class AppFader extends React.Component<AppProps<AppState>, AppFaderState> {
             // we're showing.
             this.setState({
                 shownState: nextProps.state,
-                fadeIn: true
+                show: true
             });
         }
     }
@@ -202,20 +201,20 @@ class AppFader extends React.Component<AppProps<AppState>, AppFaderState> {
         // state is. This could be a loading screen, or it could be
         // a real interactive state.
         this.setState({
-            fadeIn: true,
+            show: true,
             shownState: this.props.state,
             isFadedOut: true
         });
     }
 
     render() {
-        const fadeIn = this.state.fadeIn;
+        const show = this.state.show;
         const state = this.state.shownState;
-        const dispatch = fadeIn ? this.props.dispatch : () => {};
+        const dispatch = show ? this.props.dispatch : () => {};
         const timeout = this.state.fadeTime;
 
         return (
-            <Transition in={fadeIn} timeout={timeout} onExited={this.handleFadedOut}>
+            <Transition in={show} timeout={timeout} onExited={this.handleFadedOut}>
                 {(tState: TransitionState) => (
                     <div {...cls('app-fader', tState)}>
                         <App state={state} dispatch={dispatch} />
