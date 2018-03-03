@@ -18,6 +18,7 @@
     --fg-color: white;
     --bg-color: black;
     --margin-size: 20px;
+    --fade-time: 250ms;
     --base-font: 'sourcecodepro', monospace;
     --heading-font: 'abelregular', Arial, Helvetica, sans-serif;
 }
@@ -61,8 +62,21 @@ h1, h2, h3 {
     font-weight: 400;
 }
 
-html, body, #app {
+html, body, #app, .app-fader {
     height: 100%;
+}
+
+.app-fader {
+    transition: opacity var(--fade-time) ease-in-out;
+    opacity: 0;
+}
+
+.app-fader.exited, .app-fader.exiting {
+    opacity: 0;
+}
+
+.app-fader.entering, .app-fader.entered {
+    opacity: 1;
 }
 
 .simple-layout .layout-top {

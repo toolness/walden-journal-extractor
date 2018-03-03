@@ -77,7 +77,7 @@ async function startLoading(): Promise<AppAction> {
     if (!saveGameDir) {
         return noSavedGamesErr;
     }
-    
+
     const saveGames = await SaveGame.retrieveAll(saveGameDir);
 
     if (saveGames.length === 0) {
