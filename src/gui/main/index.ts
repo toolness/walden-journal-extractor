@@ -4,8 +4,6 @@ import * as url from 'url';
 import 'source-map-support/register'
 import { app, BrowserWindow } from 'electron';
 
-import './rpc-server';
-
 let win: BrowserWindow | null = null;
 
 // Taken from https://github.com/sindresorhus/electron-is-dev.
