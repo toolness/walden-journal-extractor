@@ -11,6 +11,7 @@
     "package": "npm run package-win && npm run package-osx",
     "package-win": "electron-packager . --overwrite --out=release-builds --platform=win32 --arch=ia32 --icon=icon.ico",
     "package-osx": "electron-packager . --overwrite --out=release-builds --platform=darwin --arch=x64 --icon=icon.icns",
+    "package-osx-in-docker": "docker-compose run app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Atul Varma <varmaa@gmail.com>",

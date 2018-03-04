@@ -1,0 +1,18 @@
+# This Docker Compose setup is only intended for packaging
+# the OS X version of the app on a Windows machine. It's
+# not intended for general development.
+version: '3'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - staging:/staging
+    working_dir: /staging
+    command: /bin/bash /app/docker-package-osx.sh
+volumes:
+  # We need to package the OS X app in a Docker volume
+  # because layered file systems don't deal well with
+  # symlinks, which are required for the app bundle
+  # (at least, I think that's what's going on).
+  staging:
