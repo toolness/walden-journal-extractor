@@ -8,7 +8,7 @@
     "start": "tsc --watch",
     "postinstall": "tsc",
     "gui": "electron .",
-    "package": "npm run package-win && npm run package-osx",
+    "package-all": "npm run package-osx-in-docker && npm run package-win && npm run zip-windows-in-docker",
     "package-win": "electron-packager . --overwrite --out=release-builds --platform=win32 --arch=ia32 --icon=icon.ico",
     "package-osx": "electron-packager . --overwrite --out=release-builds --platform=darwin --arch=x64 --icon=icon.icns",
     "package-osx-in-docker": "node dist/packaging/package-osx-in-docker.js",
