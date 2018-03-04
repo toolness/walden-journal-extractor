@@ -17,6 +17,7 @@ function createWindow() {
         resizable: true,
         autoHideMenuBar: true,
         show: false,
+        icon: 'icon.png',
         webPreferences: {
             zoomFactor: 0.75,
         }
