@@ -26,7 +26,7 @@ function createWindow() {
     });
 
     win.loadURL(url.format({
-        pathname: path.join(rootDir, 'index.html'),
+        pathname: path.join(rootDir, 'static', 'index.html'),
         protocol: 'file:',
         slashes: true,
     }));
