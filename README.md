@@ -72,6 +72,21 @@ code (generally located in `src/gui/renderer`) will only require a
 page reload in Electron, but changes made to the main process will
 require aborting and re-running `npm run gui`.
 
+### Packaging
+
+Currently, packaging the app into ZIP files for Windows and OS X
+is only (easily) supported on Windows machines with Docker
+installed.
+
+To package everything, run:
+
+```
+npm run package-all
+```
+
+This will create ZIP files for distribution in the `release-builds`
+directory.
+
 ## License
 
 All code is licensed under CC0 (public domain).

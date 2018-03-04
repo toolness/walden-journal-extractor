@@ -1,6 +1,5 @@
 # This Docker Compose setup is only intended for packaging
-# the OS X version of the app on a Windows machine. It's
-# not intended for general development.
+# app for distribution. It's not intended for general development.
 version: '3'
 services:
   app:
