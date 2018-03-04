@@ -6,6 +6,8 @@ import { app, BrowserWindow } from 'electron';
 
 let win: BrowserWindow | null = null;
 
+const rootDir = path.normalize(path.join(__dirname, '..', '..', '..'));
+
 // Taken from https://github.com/sindresorhus/electron-is-dev.
 const isDev = /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
@@ -17,14 +19,14 @@ function createWindow() {
         resizable: true,
         autoHideMenuBar: true,
         show: false,
-        icon: 'icon.png',
+        icon: path.join(rootDir, 'icon.png'),
         webPreferences: {
             zoomFactor: 0.75,
         }
     });
 
     win.loadURL(url.format({
-        pathname: path.join(__dirname, '..', '..', '..', 'index.html'),
+        pathname: path.join(rootDir, 'index.html'),
         protocol: 'file:',
         slashes: true,
     }));
