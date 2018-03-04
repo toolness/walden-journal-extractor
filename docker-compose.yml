@@ -8,9 +8,9 @@ services:
     volumes:
       - .:/app
       - staging:/staging
-    working_dir: /staging
-    command: node /app/dist/packaging/osx-in-docker.js
+    working_dir: /app
     environment:
+      - IS_RUNNING_IN_DOCKER=yup
       - APP_DIR=/app
       - STAGING_DIR=/staging
 volumes:
