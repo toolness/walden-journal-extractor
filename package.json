@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Journal extractor for waldengame.com",
   "productName": "Walden Journal Extractor",
+  "main": "./dist/gui/main",
   "scripts": {
     "start": "tsc --watch",
     "postinstall": "tsc",
