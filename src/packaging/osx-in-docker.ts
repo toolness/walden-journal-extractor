@@ -1,33 +1,27 @@
-import { execSync } from 'child_process';
+import * as path from 'path';
+import { productName, zipfileName, releaseDir } from './config';
+import { runSync } from './util';
+import { APP_DIR, STAGING_DIR } from './docker';
 
-import { productName, shortName, version } from './config';
+const downloadCacheDir = path.join(STAGING_DIR, 'tmp');
 
-const TMPDIR = '/staging/tmp';
+const appStagingDir = path.join(STAGING_DIR, 'app');
 
-const APPNAME = productName;
+const zipfile = zipfileName('osx');
 
-const ZIPFILE = `${shortName}-${version}-osx.zip`;
+const absReleaseDir = path.join(APP_DIR, releaseDir);
 
-const DESTDIR_NAME = 'release-builds';
-
-const DESTDIR = `/app/${DESTDIR_NAME}`;
-
-function run(cmd: string) {
-    execSync(cmd, { stdio: 'inherit' });
-}
-
-run([
-    `mkdir -p ${TMPDIR}`,
+runSync([
+    `mkdir -p ${downloadCacheDir}`,
     `echo "Copying repository to staging directory..."`,
-    `cd /staging`,
-    `rm -rf app`,
-    `cp -R /app/ app`,
-    `cd app`,
+    `rm -rf ${appStagingDir}`,
+    `cp -R ${APP_DIR}/ ${appStagingDir}`,
+    `cd ${appStagingDir}`,
     `echo "Packaging app for OS X..."`,
-    `npm run package-osx -- --download.cache=${TMPDIR}`,
-    `cd "release-builds/${APPNAME}-darwin-x64"`,
-    `zip -y -r ${ZIPFILE} "${APPNAME}.app"`,
-    `mkdir -p ${DESTDIR}`,
-    `cp ${ZIPFILE} ${DESTDIR}`,
-    `echo "The packaged OS X app is in ${DESTDIR_NAME}/${ZIPFILE}."`
+    `npm run package-osx -- --download.cache=${downloadCacheDir}`,
+    `cd "release-builds/${productName}-darwin-x64"`,
+    `zip -y -r ${zipfile} "${productName}.app"`,
+    `mkdir -p ${absReleaseDir}`,
+    `cp ${zipfile} ${absReleaseDir}`,
+    `echo "The packaged OS X app is in ${releaseDir}/${zipfile}."`
 ].join('\\\n && '));

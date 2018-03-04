@@ -10,6 +10,9 @@ services:
       - staging:/staging
     working_dir: /staging
     command: node /app/dist/packaging/osx-in-docker.js
+    environment:
+      - APP_DIR=/app
+      - STAGING_DIR=/staging
 volumes:
   # We need to package the OS X app in a Docker volume
   # because layered file systems don't deal well with

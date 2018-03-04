@@ -1,19 +1,15 @@
-const packageJson = require('../../package.json');
+import { FriendlyGetter } from './util';
 
-function getString(name: string): string {
-    const val = packageJson[name];
+const packageJson = new FriendlyGetter(require('../../package.json'), 'package.json');
 
-    if (typeof(val) !== 'string') {
-        throw new Error(
-            `Expected ${name} prop of package.json to be a string`
-        );
-    }
+export const shortName = packageJson.getStr('name');
 
-    return val;
+export const productName = packageJson.getStr('productName');
+
+export const version = packageJson.getStr('version');
+
+export function zipfileName(platform: 'osx'|'windows'): string {
+    return `${shortName}-${version}-${platform}.zip`;
 }
 
-export const shortName = getString('name');
-
-export const productName = getString('productName');
-
-export const version = getString('version');
+export const releaseDir = 'release-builds';
