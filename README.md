@@ -1,5 +1,5 @@
-This is a simple utility that allows a [Walden][] save game's journal to be
-exported to a variety of formats.
+This is a simple Electron-based app that allows a [Walden][] save
+game's journal to be exported to a variety of formats.
 
 ## Quick start
 
@@ -17,9 +17,41 @@ Then run:
 npm run gui
 ```
 
+## Development
+
+To start the auto-reloading development server, run:
+
+```
+npm start
+```
+
+Note that the project uses [TypeScript][].
+
+In a separate terminal, you can run `npm run gui` to start the
+[Electron][]-based GUI. Any changes you make to the renderer process
+code (generally located in `src/gui/renderer`) will only require a
+page reload in Electron, but changes made to the main process will
+require aborting and re-running `npm run gui`.
+
+### Packaging
+
+Currently, packaging the app into ZIP files for Windows and OS X
+is only (easily) supported on Windows machines with Docker
+installed.
+
+To package everything, run:
+
+```
+npm run package-all
+```
+
+This will create ZIP files for distribution in the `release-builds`
+directory.
+
 ## Example CLI usage
 
-A command-line interface is also available via `node dist/cli.js`.
+In addition to the GUI, a command-line interface is also available
+via `node dist/cli.js`.
 
 Running it without any arguments will show you a list of saved game
 slots:
@@ -55,37 +87,6 @@ I went to the woods because I wished to live deliberately, to front only the ess
 
 The output is directed to stdout, so it can be piped to a file or the
 clipboard (via e.g. `clip` on Windows or `pbcopy` on OS X).
-
-## Development
-
-To start the auto-reloading development server, run:
-
-```
-npm start
-```
-
-Note that the project uses [TypeScript][].
-
-In a separate terminal, you can run `npm run gui` to start the
-[Electron][]-based GUI. Any changes you make to the renderer process
-code (generally located in `src/gui/renderer`) will only require a
-page reload in Electron, but changes made to the main process will
-require aborting and re-running `npm run gui`.
-
-### Packaging
-
-Currently, packaging the app into ZIP files for Windows and OS X
-is only (easily) supported on Windows machines with Docker
-installed.
-
-To package everything, run:
-
-```
-npm run package-all
-```
-
-This will create ZIP files for distribution in the `release-builds`
-directory.
 
 ## License
 
