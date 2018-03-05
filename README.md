@@ -1,6 +1,10 @@
 This is a simple Electron-based app that allows a [Walden][] save
 game's journal to be exported to a variety of formats.
 
+<img src="https://user-images.githubusercontent.com/124687/36953340-e8a7e7fa-1fe7-11e8-9f09-3ecfa828c351.png">
+
+<img src="https://user-images.githubusercontent.com/124687/36953341-e8b30766-1fe7-11e8-9b8d-9a3513b47483.png">
+
 ## Quick start
 
 You'll need [NodeJS][] 8 or later.
