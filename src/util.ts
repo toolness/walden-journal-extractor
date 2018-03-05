@@ -62,6 +62,18 @@ export class FriendlyGetter {
         this.name = name;
     }
 
+    getObj(key: string): FriendlyGetter {
+        const val = this.obj[key];
+
+        if (!(val && typeof(val) === 'object')) {
+            throw new Error(
+                `Expected "${key}" in ${this.name} to be an object`
+            );
+        }
+
+        return new FriendlyGetter(val, `${this.name}["${key}"]`);
+    }
+
     getStr(key: string): string {
         const val = this.obj[key];
 

@@ -34,5 +34,9 @@
     "electron": "^1.8.2",
     "electron-packager": "^11.0.1",
     "typescript": "^2.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toolness/walden-journal-extractor.git"
   }
 }

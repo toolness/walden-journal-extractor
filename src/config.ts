@@ -11,3 +11,5 @@ export const shortName = packageJson.getStr('name');
 export const productName = packageJson.getStr('productName');
 
 export const version = packageJson.getStr('version');
+
+export const repoUrl = packageJson.getObj('repository').getStr('url');

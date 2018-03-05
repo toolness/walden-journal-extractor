@@ -3,6 +3,7 @@ import * as React from 'react';
 import { AppState, ErrorState, LoadedState, Dispatcher,
          LoadedJournalState, LoadedCreditsState } from './store';
 import * as config from '../../config';
+import Link from './link';
 import saveAs from './save-as';
 import { cls } from './style';
 
@@ -87,7 +88,8 @@ function LoadedCredits({ dispatch }: AppProps<LoadedCreditsState>): JSX.Element 
             <div {...cls('layout-top')}>
                 <p>{config.productName} version {config.version}</p>
                 <p>This software has been dedicated to the public domain by Atul Varma.</p>
-                <p><em>Walden, a Game</em> is copyright Tracy Fullerton and the Walden Team.</p>
+                <p>Contributions and feedback are welcome on <Link href={config.repoUrl}>GitHub</Link>.</p>
+                <p><Link href="https://www.waldengame.com/">Walden, a Game</Link> is copyright Tracy Fullerton and the Walden Team.</p>
             </div>
             <ul {...cls('layout-bottom', 'unstyled-list')}>
                 <BigListButton onClick={() => dispatch({ type: 'init' })} label="Back"/>

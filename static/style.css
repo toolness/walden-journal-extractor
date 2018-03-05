@@ -192,3 +192,12 @@ button.bottom-right {
       "top-left    right"
       "bottom-left right";
 }
+
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+a:focus {
+    outline: 1px dashed var(--fg-color);
+}
