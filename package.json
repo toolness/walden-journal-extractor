@@ -1,6 +1,6 @@
 {
   "name": "walden-journal-extractor",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Journal extractor for waldengame.com",
   "productName": "Walden Journal Extractor",
   "main": "./dist/gui/main",
