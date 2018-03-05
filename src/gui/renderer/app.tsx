@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { AppState, ErrorState, LoadedState, Dispatcher,
-         LoadedJournalState } from './store';
+         LoadedJournalState, LoadedCreditsState } from './store';
+import * as config from '../../config';
 import saveAs from './save-as';
 import { cls } from './style';
 
@@ -72,6 +73,25 @@ function Loaded({ state, dispatch }: AppProps<LoadedState>): JSX.Element {
                     label={saveGame.name} />
             ))}
             </ul>
+            <button {...cls('bottom-right', 'muted')}
+                onClick={() => dispatch({ type: 'credits' })}>
+              ?
+            </button>
+        </div>
+    );
+}
+
+function LoadedCredits({ dispatch }: AppProps<LoadedCreditsState>): JSX.Element {
+    return (
+        <div {...cls('simple-layout')}>
+            <div {...cls('layout-top')}>
+                <p>{config.productName} version {config.version}</p>
+                <p>This software has been dedicated to the public domain by Atul Varma.</p>
+                <p><em>Walden, a Game</em> is copyright Tracy Fullerton and the Walden Team.</p>
+            </div>
+            <ul {...cls('layout-bottom', 'unstyled-list')}>
+                <BigListButton onClick={() => dispatch({ type: 'init' })} label="Back"/>
+            </ul>
         </div>
     );
 }
@@ -121,6 +141,7 @@ export function App({ state, dispatch }: AppProps<AppState>): JSX.Element {
         case 'error':
         return <ErrorView {...{ state, dispatch }} />;
 
+        case 'loadedcredits': return <LoadedCredits {...{ state, dispatch}} />;
         case 'loaded': return <Loaded {...{ state, dispatch }} />;
         case 'loadedjournal': return <LoadedJournal {...{ state, dispatch }} />;
     }

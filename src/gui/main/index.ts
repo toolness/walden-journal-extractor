@@ -3,10 +3,9 @@ import * as url from 'url';
 
 import 'source-map-support/register'
 import { app, BrowserWindow } from 'electron';
+import { rootDir } from '../../config';
 
 let win: BrowserWindow | null = null;
-
-const rootDir = path.normalize(path.join(__dirname, '..', '..', '..'));
 
 // Taken from https://github.com/sindresorhus/electron-is-dev.
 const isDev = /node_modules[\\/]electron[\\/]/.test(process.execPath);

@@ -48,3 +48,29 @@ export function friendlyGet(obj: any, path: string): any {
 export function fileExists(path: string): Promise<boolean> {
     return new Promise(resolve => { fs.exists(path, resolve); });
 }
+
+// This is a class that wraps the getting of properties
+// of an object in a runtime-checked, type-safe way, raising
+// friendly errors when properties don't exist or are of the
+// wrong type.
+export class FriendlyGetter {
+    obj: any;
+    name: string;
+
+    constructor(obj: any, name: string) {
+        this.obj = obj;
+        this.name = name;
+    }
+
+    getStr(key: string): string {
+        const val = this.obj[key];
+
+        if (typeof(val) !== 'string') {
+            throw new Error(
+                `Expected "${key}" in ${this.name} to be a string`
+            );
+        }
+
+        return val;
+    }
+}

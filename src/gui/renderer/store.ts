@@ -24,10 +24,15 @@ export interface LoadedJournalState {
     readonly isBusy: boolean;
 }
 
-export type AppState = LoadingState | ErrorState | LoadedState | LoadedJournalState;
+export interface LoadedCreditsState {
+    readonly type: 'loadedcredits';
+}
+
+export type AppState = LoadingState | ErrorState | LoadedState | LoadedJournalState |
+                       LoadedCreditsState;
 
 export interface SimpleAction {
-    type: 'init';
+    type: 'init'|'credits';
 }
 
 export interface LoadGameAction {
@@ -51,7 +56,7 @@ export interface ExportToFileAction {
 export type ExportAction = ExportToClipboardAction | ExportToFileAction;
 
 export type AppAction = SimpleAction | ErrorState | LoadedState | LoadGameAction |
-                        LoadedJournalState | ExportAction;
+                        LoadedJournalState | ExportAction | LoadedCreditsState;
 
 export type Dispatcher = (action: AppAction|Promise<AppAction>) => void;
 
@@ -93,6 +98,10 @@ async function loadGame(saveGame: SaveGame): Promise<AppAction> {
     return { type: 'loadedjournal', name: saveGame.name, journal, log: [], isBusy: false };
 }
 
+async function loadCredits(): Promise<AppAction> {
+    return { type: 'loadedcredits' };
+}
+
 async function exportJournal(state: LoadedJournalState, action: ExportAction): Promise<AppAction> {
     const done = (dest: string) => ({
         ...state,
@@ -129,7 +138,12 @@ function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): 
         case 'error':
         case 'loaded':
         case 'loadedjournal':
+        case 'loadedcredits':
         return action;
+
+        case 'credits':
+        dispatch(loadCredits());
+        return { type: 'loading' };
 
         case 'loadgame':
         dispatch(loadGame(action.saveGame));

@@ -1,7 +1,7 @@
 import * as child_process from 'child_process';
 import * as path from 'path';
 import * as fs from 'fs';
-import { FriendlyGetter } from './util';
+import { FriendlyGetter } from '../util';
 
 const ROOT_DIR = path.normalize(path.join(__dirname, '..', '..'));
 

@@ -124,34 +124,48 @@ html, body, #app, .app-fader {
     margin: 0;
 }
 
-button.big:hover:not(:disabled) {
+button:hover:not(:disabled) {
     color: var(--bg-color);
     background: var(--fg-color);
 }
 
-button.big:disabled {
+button:disabled {
     opacity: 0.5;
     cursor: default;
 }
 
-button.big:focus {
-    border: 2px dashed var(--fg-color);
+button:focus {
+    border-style: dashed;
     outline: none;
 }
 
-button.big {
+button {
     transition: opacity 0.5s;
-    display: block;
-    width: 100%;
-    padding: 10px 0;
-    margin: var(--margin-size) 0;
-    border: 2px solid var(--fg-color);
     text-transform: uppercase;
     background: transparent;
     color: inherit;
     cursor: pointer;
     font-family: inherit;
     font-size: inherit;
+    border: 1px solid var(--fg-color);
+}
+
+button.big {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    margin: var(--margin-size) 0;
+    border-width: 2px;
+}
+
+button.muted {
+    opacity: 0.75;
+}
+
+button.bottom-right {
+    position: absolute;
+    bottom: var(--margin-size);
+    right: var(--margin-size);
 }
 
 .simple-layout {
