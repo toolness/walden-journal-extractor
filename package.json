@@ -9,7 +9,7 @@
     "postinstall": "tsc",
     "gui": "electron .",
     "package-all": "npm run package-osx-in-docker && npm run package-win && npm run zip-windows-in-docker",
-    "package-win": "electron-packager . --overwrite --out=release-builds --platform=win32 --arch=ia32 --icon=icon.ico",
+    "package-win": "electron-packager . --overwrite --out=release-builds --platform=win32 --arch=ia32 --icon=icon.ico --asar",
     "package-osx": "electron-packager . --overwrite --out=release-builds --platform=darwin --arch=x64 --icon=icon.icns",
     "package-osx-in-docker": "node dist/packaging/package-osx-in-docker.js",
     "zip-windows-in-docker": "node dist/packaging/zip-windows-in-docker.js",
