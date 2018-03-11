@@ -177,7 +177,6 @@ export class AppStore {
     }
 
     private poll() {
-        console.log('poll');
         startLoading().then(action => {
             if (isDeepEqual(action, this.state)) {
                 this.setPolling();
