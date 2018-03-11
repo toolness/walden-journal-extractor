@@ -88,10 +88,15 @@ export class FriendlyGetter {
     }
 }
 
+// Normalize the newlines of the given string to be UNIX-like.
+export function normalizeNewlines(text: string): string {
+    return text.replace(/\r\n/g, '\n');
+}
+
 // Convert the given string to the given platform's newlines.
 // It only really accounts for UNIX-like platforms and win32.
 export function toPlatformNewlines(text: string, platform: string = process.platform): string {
-    text = text.replace(/\r\n/g, '\n');
+    text = normalizeNewlines(text);
     if (platform === 'win32') {
         return text.split('\n').join('\r\n');
     }
