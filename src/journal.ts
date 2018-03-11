@@ -7,7 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import * as docx from 'docx';
 
 import * as journalHtml from './journal-html';
-import { toPlatformNewlines } from './util';
+import { toPlatformNewlines, normalizeNewlines } from './util';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -124,7 +124,7 @@ export default class Journal {
 
     static fromText(text: string): Journal {
         const ALL_UNDERSCORES = /^_+$/;
-        const inputLines = text.split('\n');
+        const inputLines = normalizeNewlines(text).split('\n');
         const nodes: JournalNode[] = [];
         let lastLine: string | null = null;
 
