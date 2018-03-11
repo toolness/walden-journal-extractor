@@ -176,27 +176,32 @@ export class AppStore {
         this.renderer(this.state, this.dispatch);
     }
 
-    private poll() {
+    private poll(lastLoadedAction: LoadedState) {
         startLoading().then(action => {
-            if (isDeepEqual(action, this.state)) {
-                this.setPolling();
+            if (isDeepEqual(action, lastLoadedAction)) {
+                this.setPolling(lastLoadedAction);
             } else {
                 this.dispatch(action);
             }
         }).catch(e => {
             console.warn('Exception thrown during poll!');
             console.error(e);
-            this.setPolling();
+            this.setPolling(lastLoadedAction);
         });
     }
 
-    private setPolling() {
+    private clearPolling() {
         if (this.pollTimeout !== null) {
             clearTimeout(this.pollTimeout);
             this.pollTimeout = null;
         }
+    }
+
+    private setPolling(lastLoadedAction: LoadedState) {
         if (this.state.type === 'loaded') {
-            this.pollTimeout = setTimeout(this.poll, POLL_MS);
+            this.pollTimeout = setTimeout(() => {
+                this.poll(lastLoadedAction);
+            }, POLL_MS);
         }
     }
 
@@ -210,7 +215,8 @@ export class AppStore {
             });
         } else {
             this.state = applyAction(this.state, action, this.dispatch);
-            this.setPolling();
+            this.clearPolling();
+            if (action.type === 'loaded') this.setPolling(action);
             this.renderer(this.state, this.dispatch);
         }
     }
