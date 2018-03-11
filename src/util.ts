@@ -86,3 +86,11 @@ export class FriendlyGetter {
         return val;
     }
 }
+
+export function toPlatformNewlines(text: string, platform: string = process.platform): string {
+    text = text.replace(/\r\n/g, '\n');
+    if (platform === 'win32') {
+        return text.split('\n').join('\r\n');
+    }
+    return text;
+}

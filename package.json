@@ -13,7 +13,7 @@
     "package-osx": "electron-packager . --overwrite --out=release-builds --platform=darwin --arch=x64 --icon=icon.icns",
     "package-osx-in-docker": "node dist/packaging/package-osx-in-docker.js",
     "zip-windows-in-docker": "node dist/packaging/zip-windows-in-docker.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register test/**/*.ts"
   },
   "author": "Atul Varma <varmaa@gmail.com>",
   "license": "CC0-1.0",
@@ -28,11 +28,16 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.48",
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
     "@types/xml2js": "^0.4.2",
+    "chai": "^4.1.2",
     "electron": "^1.8.2",
     "electron-packager": "^11.0.1",
+    "mocha": "^5.0.4",
+    "ts-node": "^5.0.1",
     "typescript": "^2.7.2"
   },
   "repository": {

@@ -7,6 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import * as docx from 'docx';
 
 import * as journalHtml from './journal-html';
+import { toPlatformNewlines } from './util';
 
 const writeFile = promisify(fs.writeFile);
 
@@ -92,8 +93,8 @@ export default class Journal {
 
     toClipboard() {
         clipboard.write({
-            text: this.asMarkdown(),
-            html: this.asHTML()
+            text: toPlatformNewlines(this.asMarkdown()),
+            html: toPlatformNewlines(this.asHTML())
         });
     }
 
@@ -118,7 +119,7 @@ export default class Journal {
 
         const jsx = journalHtml.page(title, this.asJSX());
         const html = '<!DOCTYPE html>\n' + renderToStaticMarkup(jsx);
-        return writeFile(path, html, 'utf-8');
+        return writeFile(path, toPlatformNewlines(html), 'utf-8');
     }
 
     static fromText(text: string): Journal {
