@@ -103,7 +103,7 @@ export function toPlatformNewlines(text: string, platform: string = process.plat
     return text;
 }
 
-// This is just like assert.deepEqual(), but returns a boolen
+// This is just like assert.deepEqual(), but returns a boolean
 // instead of throwing.
 export function isDeepEqual(a: any, b: any): boolean {
     try {
