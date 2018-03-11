@@ -198,11 +198,9 @@ export class AppStore {
     }
 
     private setPolling(lastLoadedAction: LoadedState) {
-        if (this.state.type === 'loaded') {
-            this.pollTimeout = setTimeout(() => {
-                this.poll(lastLoadedAction);
-            }, POLL_MS);
-        }
+        this.pollTimeout = setTimeout(() => {
+            this.poll(lastLoadedAction);
+        }, POLL_MS);
     }
 
     dispatch(action: AppAction|Promise<AppAction>) {
