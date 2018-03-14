@@ -1,3 +1,4 @@
+import * as assert from 'assert';
 import * as fs from 'fs';
 
 import * as xml2js from 'xml2js';
@@ -100,4 +101,15 @@ export function toPlatformNewlines(text: string, platform: string = process.plat
         return text.split('\n').join('\r\n');
     }
     return text;
+}
+
+// This is just like assert.deepEqual(), but returns a boolean
+// instead of throwing.
+export function isDeepEqual(a: any, b: any): boolean {
+    try {
+        assert.deepEqual(a, b);
+        return true;
+    } catch (e) {
+        return false;
+    }
 }

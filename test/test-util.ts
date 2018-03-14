@@ -31,3 +31,15 @@ describe('toPlatformNewlines()', () => {
         expect(a).to.eq(b);
     });
 });
+
+describe('isDeepEqual()', () => {
+    it('returns true when args are equal', () => {
+        expect(util.isDeepEqual({ foo: { bar: [1] } }, { foo: { bar: [1] } }))
+          .to.be.true;
+    });
+
+    it('returns false when args are not equal', () => {
+        expect(util.isDeepEqual({ foo: { bar: [1] } }, { foo: { bar: [5] } }))
+          .to.be.false;
+    });
+});

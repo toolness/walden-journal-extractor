@@ -1,6 +1,7 @@
 import * as dirs from '../../dirs';
 import SaveGame from '../../savegame';
 import Journal from '../../journal';
+import { isDeepEqual } from '../../util';
 
 export interface LoadingState {
     readonly type: 'loading';
@@ -159,15 +160,47 @@ function applyAction(state: AppState, action: AppAction, dispatch: Dispatcher): 
     }
 }
 
+const POLL_MS = 1000;
+
 export class AppStore {
     private renderer: Renderer;
     private state: AppState;
+    private pollTimeout: NodeJS.Timer|null;
 
     constructor(renderer: Renderer) {
         this.renderer = renderer;
         this.state = { type: 'loading' };
         this.dispatch = this.dispatch.bind(this);
+        this.poll = this.poll.bind(this);
+        this.pollTimeout = null;
         this.renderer(this.state, this.dispatch);
+    }
+
+    private poll(lastLoadedAction: LoadedState) {
+        startLoading().then(action => {
+            if (isDeepEqual(action, lastLoadedAction)) {
+                this.setPolling(lastLoadedAction);
+            } else {
+                this.dispatch(action);
+            }
+        }).catch(e => {
+            console.warn('Exception thrown during poll!');
+            console.error(e);
+            this.setPolling(lastLoadedAction);
+        });
+    }
+
+    private clearPolling() {
+        if (this.pollTimeout !== null) {
+            clearTimeout(this.pollTimeout);
+            this.pollTimeout = null;
+        }
+    }
+
+    private setPolling(lastLoadedAction: LoadedState) {
+        this.pollTimeout = setTimeout(() => {
+            this.poll(lastLoadedAction);
+        }, POLL_MS);
     }
 
     dispatch(action: AppAction|Promise<AppAction>) {
@@ -180,6 +213,8 @@ export class AppStore {
             });
         } else {
             this.state = applyAction(this.state, action, this.dispatch);
+            this.clearPolling();
+            if (action.type === 'loaded') this.setPolling(action);
             this.renderer(this.state, this.dispatch);
         }
     }
