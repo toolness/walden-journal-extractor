@@ -7,6 +7,8 @@ to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.0.2][] - 2018-03-14
+
 * Hopefully fixed a bug on older versions of Windows whereby some pathnames
   are too long (#10).
 * Exporting to HTML and clipboard on Windows now uses CRLF line endings (#4).
@@ -17,4 +19,5 @@ to [Semantic Versioning](http://semver.org/).
 
 Initial release.
 
-[unreleased]: https://github.com/toolness/walden-journal-extractor/compare/v0.0.1...HEAD
+[unreleased]: https://github.com/toolness/walden-journal-extractor/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/toolness/walden-journal-extractor/compare/v0.0.1...v0.0.2
